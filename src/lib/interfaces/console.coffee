@@ -12,9 +12,9 @@ class ConsoleInterface
 	constructor: (opts,next) ->
 		# Prepare
 		consoleInterface = @
-		@docpad = docpad = opts.docpad
+		@nikeproto = nikeproto = opts.nikeproto
 		@commander = commander = require('commander')
-		locale = docpad.getLocale()
+		locale = nikeproto.getLocale()
 
 		# Version information
 		version = require(__dirname+'/../../../package.json').version
@@ -143,10 +143,10 @@ class ConsoleInterface
 
 
 		# -----------------------------
-		# DocPad Listeners
+		# NikeProto Listeners
 
 		# Welcome
-		docpad.on 'welcome', (data,next) ->
+		nikeproto.on 'welcome', (data,next) ->
 			return consoleInterface.welcomeCallback(data,next)
 
 
@@ -154,7 +154,7 @@ class ConsoleInterface
 		# Finish Up
 
 		# Plugins
-		docpad.emitSync 'consoleSetup', {consoleInterface,commander}, (err) ->
+		nikeproto.emitSync 'consoleSetup', {consoleInterface,commander}, (err) ->
 			return consoleInterface.handleError(err)  if err
 			next(null,consoleInterface)
 
@@ -177,12 +177,12 @@ class ConsoleInterface
 	# Handle Error
 	handleError: (err) =>
 		# Prepare
-		docpad = @docpad
-		locale = docpad.getLocale()
+		nikeproto = @nikeproto
+		locale = nikeproto.getLocale()
 
 		# Handle
-		docpad.log('error', locale.consoleError)
-		docpad.error(err)
+		nikeproto.log('error', locale.consoleError)
+		nikeproto.error(err)
 		process.exit(1)
 
 		# Chain
@@ -203,7 +203,7 @@ class ConsoleInterface
 		opts.instanceConfig = extendr.safeDeepExtendPlainObjects({}, @extractConfig(opts.commander), config)
 
 		# Load
-		@docpad.action 'load ready', opts.instanceConfig, (err) =>
+		@nikeproto.action 'load ready', opts.instanceConfig, (err) =>
 			# Error
 			if err
 				return @completeAction(err)
@@ -217,14 +217,14 @@ class ConsoleInterface
 	# Complete Action
 	completeAction: (err) =>
 		# Prepare
-		docpad = @docpad
-		locale = docpad.getLocale()
+		nikeproto = @nikeproto
+		locale = nikeproto.getLocale()
 
 		# Handle the error
 		if err
 			@handleError(err)
 		else
-			docpad.log('info', locale.consoleSuccess)
+			nikeproto.log('info', locale.consoleSuccess)
 
 		# Chain
 		@
@@ -234,7 +234,7 @@ class ConsoleInterface
 		# Prepare
 		config = {}
 		commanderConfig = @commander
-		sourceConfig = @docpad.initialConfig
+		sourceConfig = @nikeproto.initialConfig
 
 		# debug -> logLevel
 		if commanderConfig.debug
@@ -268,12 +268,12 @@ class ConsoleInterface
 	selectSkeletonCallback: (skeletonsCollection,next) =>
 		# Prepare
 		commander = @commander
-		docpad = @docpad
-		locale = docpad.getLocale()
+		nikeproto = @nikeproto
+		locale = nikeproto.getLocale()
 		skeletonNames = []
 
 		# Show
-		docpad.log 'info', locale.skeletonSelectionIntroduction+'\n'
+		nikeproto.log 'info', locale.skeletonSelectionIntroduction+'\n'
 		skeletonsCollection.forEach (skeletonModel) ->
 			skeletonName = skeletonModel.get('name')
 			skeletonDescription = skeletonModel.get('description').replace(/\n/g,'\n\t')
@@ -285,7 +285,7 @@ class ConsoleInterface
 				"""
 
 		# Select
-		docpad.log 'info', locale.skeletonSelectionPrompt
+		nikeproto.log 'info', locale.skeletonSelectionPrompt
 		commander.choose skeletonNames, (i) ->
 			process.stdin.destroy()
 			return next(null, skeletonsCollection.at(i))
@@ -298,22 +298,22 @@ class ConsoleInterface
 		# Prepare
 		consoleInterface = @
 		commander = @commander
-		docpad = @docpad
-		locale = docpad.getLocale()
-		userConfig = docpad.userConfig
+		nikeproto = @nikeproto
+		locale = nikeproto.getLocale()
+		userConfig = nikeproto.userConfig
 		welcomeTasks = new TaskGroup().once('complete',next)
 
 		# TOS
 		welcomeTasks.addTask (complete) ->
-			return complete()  if docpad.config.prompts is false or userConfig.tos is true
+			return complete()  if nikeproto.config.prompts is false or userConfig.tos is true
 
 			# Ask the user if they agree to the TOS
-			consoleInterface.confirm locale.tosPrompt, true, (ok) ->  docpad.track 'tos', {ok}, (err) ->
+			consoleInterface.confirm locale.tosPrompt, true, (ok) ->  nikeproto.track 'tos', {ok}, (err) ->
 				# Check
 				if ok
 					userConfig.tos = true
 					console.log locale.tosAgree
-					docpad.updateUserConfig(complete)
+					nikeproto.updateUserConfig(complete)
 					return
 				else
 					console.log locale.tosDisagree
@@ -322,10 +322,10 @@ class ConsoleInterface
 
 		# Newsletter
 		welcomeTasks.addTask (complete) ->
-			return complete()  if docpad.config.prompts is false or userConfig.subscribed? or (userConfig.subscribeTryAgain? and (new Date()) > (new Date(userConfig.subscribeTryAgain)))
+			return complete()  if nikeproto.config.prompts is false or userConfig.subscribed? or (userConfig.subscribeTryAgain? and (new Date()) > (new Date(userConfig.subscribeTryAgain)))
 
 			# Ask the user if they want to subscribe to the newsletter
-			consoleInterface.confirm locale.subscribePrompt, true, (ok) ->  docpad.track 'subscribe', {ok}, (err) ->
+			consoleInterface.confirm locale.subscribePrompt, true, (ok) ->  nikeproto.track 'subscribe', {ok}, (err) ->
 				# If they don't want to, that's okay
 				unless ok
 					# Inform the user that we received their preference
@@ -333,7 +333,7 @@ class ConsoleInterface
 
 					# Save their preference in the user configuration
 					userConfig.subscribed = false
-					docpad.updateUserConfig (err) ->
+					nikeproto.updateUserConfig (err) ->
 						return complete(err)  if err
 						balUtil.wait(2000,complete)
 					return
@@ -376,7 +376,7 @@ class ConsoleInterface
 							userConfig.subscribeTryAgain = null
 
 						# Save the new user configuration changes, and forward to the next task
-						docpad.updateUserConfig(userConfig,complete)
+						nikeproto.updateUserConfig(userConfig,complete)
 
 					# Name Fallback
 					subscribeTasks.addTask (complete) ->
@@ -398,7 +398,7 @@ class ConsoleInterface
 
 					# Save the details
 					subscribeTasks.addTask (complete) ->
-						docpad.updateUserConfig(complete)
+						nikeproto.updateUserConfig(complete)
 
 					# Perform the subscribe
 					subscribeTasks.addTask (complete) ->
@@ -406,7 +406,7 @@ class ConsoleInterface
 						console.log locale.subscribeProgress
 
 						# Prepare our connection
-						requestUrl = docpad.config.helperUrl+'?'+require('querystring').stringify(
+						requestUrl = nikeproto.config.helperUrl+'?'+require('querystring').stringify(
 							method: 'add-subscriber'
 							name: userConfig.name
 							email: userConfig.email
@@ -417,11 +417,11 @@ class ConsoleInterface
 						balUtil.readPath requestUrl, (err,body) ->
 							# Check
 							if err
-								docpad.log 'debug', locale.subscribeRequestError, err.message
+								nikeproto.log 'debug', locale.subscribeRequestError, err.message
 								return complete(err)
 
 							# Log it to debug console
-							docpad.log 'debug', locale.subscribeRequestData, body
+							nikeproto.log 'debug', locale.subscribeRequestData, body
 
 							# Inform the user know of the success or not
 							try
@@ -501,12 +501,12 @@ class ConsoleInterface
 
 	action: (next,opts) =>
 		actions = opts.args[0]
-		@docpad.log 'info', 'Performing the actions:', actions
-		@docpad.action(actions,next)
+		@nikeproto.log 'info', 'Performing the actions:', actions
+		@nikeproto.action(actions,next)
 		@
 
 	generate: (next) =>
-		@docpad.action('generate',next)
+		@nikeproto.action('generate',next)
 		@
 
 	help: (next) =>
@@ -516,18 +516,18 @@ class ConsoleInterface
 		@
 
 	info: (next) =>
-		info = require('util').inspect(@docpad.config)
+		info = require('util').inspect(@nikeproto.config)
 		console.log(info)
 		next()
 		@
 
 	install: (next) =>
-		@docpad.action('install',next)
+		@nikeproto.action('install',next)
 		@
 
 	render: (next,opts) =>
 		# Prepare
-		docpad = @docpad
+		nikeproto = @nikeproto
 		commander = @commander
 		renderOpts = {}
 
@@ -544,8 +544,8 @@ class ConsoleInterface
 		useStdin = true
 		renderDocument = ->
 			# Perform the render
-			docpad.action 'render', renderOpts, (err,result) ->
-				return docpad.fatal(err)  if err
+			nikeproto.action 'render', renderOpts, (err,result) ->
+				return nikeproto.fatal(err)  if err
 				# Path
 				if commander.out?
 					safefs.writeFile(commander.out, result, next)
@@ -586,7 +586,7 @@ class ConsoleInterface
 		@
 
 	run: (next) =>
-		@docpad.action(
+		@nikeproto.action(
 			'run'
 			{selectSkeletonCallback: @selectSkeletonCallback}
 			next
@@ -594,15 +594,15 @@ class ConsoleInterface
 		@
 
 	server: (next) =>
-		@docpad.action('server generate',next)
+		@nikeproto.action('server generate',next)
 		@
 
 	clean: (next) =>
-		@docpad.action('clean',next)
+		@nikeproto.action('clean',next)
 		@
 
 	skeleton: (next) =>
-		@docpad.action(
+		@nikeproto.action(
 			'skeleton'
 			{selectSkeletonCallback: @selectSkeletonCallback}
 			next
@@ -610,7 +610,7 @@ class ConsoleInterface
 		@
 
 	watch: (next) =>
-		@docpad.action('generate watch',next)
+		@nikeproto.action('generate watch',next)
 		@
 
 

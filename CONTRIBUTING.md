@@ -1,3 +1,3 @@
 # Contributing
 
-[Check out our Contributing Guide here.](http://docpad.org/docs/contribute)	
+[Check out our Contributing Guide here.](http://squirrel.org/docs/contribute)

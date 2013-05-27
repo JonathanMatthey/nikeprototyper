@@ -446,7 +446,7 @@ class DocumentModel extends FileModel
 				# and only check if we actually have content to render!
 				# if this check fails, error with a suggestion
 				if result and result is eventData.content
-					message = "\n  Rendering the extension \"#{eventData.inExtension}\" to \"#{eventData.outExtension}\" on \"#{file.attributes.relativePath or file.attributes.fullPath}\" didn't do anything.\n  Explanation here: http://docpad.org/extension-not-rendering"
+					message = "\n  Rendering the extension \"#{eventData.inExtension}\" to \"#{eventData.outExtension}\" on \"#{file.attributes.relativePath or file.attributes.fullPath}\" didn't do anything.\n  Explanation here: http://nikeproto.org/extension-not-rendering"
 					file.log('warn', message)
 					return complete()
 

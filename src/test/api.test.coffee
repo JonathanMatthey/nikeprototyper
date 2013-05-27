@@ -6,14 +6,14 @@ joe = require('joe')
 # Configuration
 
 # Vars
-docpadPath = __dirname+'/../..'
-rootPath = docpadPath+'/test'
+nikeprotoPath = __dirname+'/../..'
+rootPath = nikeprotoPath+'/test'
 renderPath = rootPath+'/render'
 expectPath = rootPath+'/render-expected'
-cliPath = docpadPath+'/bin/docpad'
+cliPath = nikeprotoPath+'/bin/nikeproto'
 
-# Configure DocPad
-docpadConfig =
+# Configure NikeProto
+nikeprotoConfig =
 	growl: false
 	port: 9780
 	rootPath: rootPath
@@ -33,17 +33,17 @@ process.on 'uncaughtException', (err) ->
 	throw err
 
 # Local globals
-docpad = null
+nikeproto = null
 
 
 # -------------------------------------
 # Tests
 
-joe.suite 'docpad-api', (suite,test) ->
+joe.suite 'nikeproto-api', (suite,test) ->
 
-	# Create a DocPad Instance
+	# Create a NikeProto Instance
 	test 'createInstance', (done) ->
-		docpad = require(__dirname+'/../main').createInstance(docpadConfig,done)
+		nikeproto = require(__dirname+'/../main').createInstance(nikeprotoConfig,done)
 
 	# Render some input
 	suite 'render', (suite,test) ->
@@ -86,7 +86,7 @@ joe.suite 'docpad-api', (suite,test) ->
 					data: input.stdin
 					filename: input.filename
 					renderSingleExtensions: 'auto'
-				docpad.action 'render', opts, (err,result) ->
+				nikeproto.action 'render', opts, (err,result) ->
 					return done(err)  if err
 					expect(result.trim()).to.equal(input.stdout)
 					done()

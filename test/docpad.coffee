@@ -17,11 +17,11 @@ module.exports =
 		require: require
 
 	collections:
-		docpadConfigCollection: (database) ->
-			database.findAllLive({tag: $has: 'docpad-config-collection'})
+		nikeprotoConfigCollection: (database) ->
+			database.findAllLive({tag: $has: 'nikeproto-config-collection'})
 
 	events:
 		renderDocument: (opts) ->
-			src = "testing the docpad configuration renderDocument event"
+			src = "testing the nikeproto configuration renderDocument event"
 			out = src.toUpperCase()
 			opts.content = opts.content.replace(src,out)

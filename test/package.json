@@ -1,11 +1,11 @@
 {
-	"name": "docpad-testsite",
+	"name": "nikeproto-testsite",
 	"private": true,
 	"version": "0.1.0",
 	"dependencies": {
 		"moment": "1.6.x",
-		"docpad-plugin-marked": "latest",
-		"docpad-plugin-coffeekup": "latest",
-		"docpad-plugin-eco": "latest"
+		"nikeproto-plugin-marked": "latest",
+		"nikeproto-plugin-coffeekup": "latest",
+		"nikeproto-plugin-eco": "latest"
 	}
 }

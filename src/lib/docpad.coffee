@@ -36,14 +36,14 @@ BasePlugin = require(__dirname+'/plugin')
 
 
 # =====================================
-# DocPad
+# NikeProto
 
 ###
-The DocPad Class
+The NikeProto Class
 It extends the EventSystem from bal-util to provide system events
-It allows us to support multiple instances of docpad at the same time
+It allows us to support multiple instances of nikeproto at the same time
 ###
-class DocPad extends EventEmitterEnhanced
+class NikeProto extends EventEmitterEnhanced
 
 	# =================================
 	# Variables
@@ -134,9 +134,9 @@ class DocPad extends EventEmitterEnhanced
 
 
 	# ---------------------------------
-	# DocPad
+	# NikeProto
 
-	# DocPad's version number
+	# NikeProto's version number
 	version: null
 	getVersion: -> @version
 
@@ -144,7 +144,7 @@ class DocPad extends EventEmitterEnhanced
 	getProcessPlatform: -> process.platform
 	getProcessVersion: -> process.version.replace(/^v/,'')
 
-	# The express and http server instances bound to docpad
+	# The express and http server instances bound to nikeproto
 	serverExpress: null
 	serverHttp: null
 	getServer: (both) ->
@@ -157,7 +157,7 @@ class DocPad extends EventEmitterEnhanced
 		@serverExpress = servers.serverExpress
 		@serverHttp = servers.serverHttp
 
-	# The caterpillar instances bound to docpad
+	# The caterpillar instances bound to nikeproto
 	loggerInstances: null
 	getLogger: -> @loggerInstances?.logger
 	getLoggers: -> @loggerInstances
@@ -168,26 +168,26 @@ class DocPad extends EventEmitterEnhanced
 			@loggerInstances = loggers
 		return loggers
 
-	# The action runner instance bound to docpad
+	# The action runner instance bound to nikeproto
 	actionRunnerInstance: null
 	getActionRunner: -> @actionRunnerInstance
 
-	# The error runner instance bound to docpad
+	# The error runner instance bound to nikeproto
 	errorRunnerInstance: null
 	getErrorRunner: -> @errorRunnerInstance
 
-	# The track runner instance bound to docpad
+	# The track runner instance bound to nikeproto
 	trackRunnerInstance: null
 	getTrackRunner: -> @trackRunnerInstance
 
 	# Event Listing
 	# Whenever a event is created, it must be applied here to be available to plugins and configuration files
-	# https://github.com/bevry/docpad/wiki/Events
+	# https://github.com/bevry/nikeproto/wiki/Events
 	events: [
 		'extendTemplateData'
 		'extendCollections'
-		'docpadLoaded'
-		'docpadReady'
+		'nikeprotoLoaded'
+		'nikeprotoReady'
 		'consoleSetup'
 		'generateBefore'
 		'populateCollections'
@@ -372,7 +372,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err,skeletonsCollection)
 	getSkeletons: (next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Check if we have cached locally
@@ -395,11 +395,11 @@ class DocPad extends EventEmitterEnhanced
 					skeleton.id ?= skeletonKey
 					skeleton.name ?= skeletonKey
 					skeleton.position ?= index
-					docpad.skeletonsCollection.add(new Model(skeleton))
+					nikeproto.skeletonsCollection.add(new Model(skeleton))
 					++index
 
 			# Add No Skeleton Option
-			docpad.skeletonsCollection.add(new Model(
+			nikeproto.skeletonsCollection.add(new Model(
 				id: 'none'
 				name: locale.skeletonNoneName
 				description: locale.skeletonNoneDescription
@@ -407,7 +407,7 @@ class DocPad extends EventEmitterEnhanced
 			))
 
 			# Return Collection
-			return next(null, docpad.skeletonsCollection)
+			return next(null, nikeproto.skeletonsCollection)
 		@
 
 
@@ -420,39 +420,39 @@ class DocPad extends EventEmitterEnhanced
 	# Loaded plugins indexed by name
 	loadedPlugins: null  # {}
 
-	# A listing of all the available extensions for DocPad
+	# A listing of all the available extensions for NikeProto
 	exchange: null  # {}
 
 
 	# -----------------------------
 	# Paths
 
-	# The DocPad directory
+	# The NikeProto directory
 	corePath: pathUtil.join(__dirname, '..', '..')
 
-	# The DocPad library directory
+	# The NikeProto library directory
 	libPath: __dirname
 
-	# The main DocPad file
-	mainPath: pathUtil.join(__dirname, 'docpad')
+	# The main NikeProto file
+	mainPath: pathUtil.join(__dirname, 'nikeproto')
 
-	# The DocPad package.json path
+	# The NikeProto package.json path
 	packagePath: pathUtil.join(__dirname, '..', '..', 'package.json')
 
-	# The DocPad locale path
+	# The NikeProto locale path
 	localePath: pathUtil.join(__dirname, '..', '..', 'locale')
 
-	# The DocPad debug log path
-	debugLogPath: pathUtil.join(process.cwd(), 'docpad-debug.log')
+	# The NikeProto debug log path
+	debugLogPath: pathUtil.join(process.cwd(), 'nikeproto-debug.log')
 
 	# The User's configuration path
-	userConfigPath: '.docpad.cson'
+	userConfigPath: '.nikeproto.cson'
 
 
 	# -----------------------------
 	# Template Data
 
-	# DocPad's Template Data
+	# NikeProto's Template Data
 	initialTemplateData: null  # {}
 
 	# Plugin's Extended Template Data
@@ -462,22 +462,22 @@ class DocPad extends EventEmitterEnhanced
 	getTemplateData: (userTemplateData) ->
 		# Prepare
 		userTemplateData or= {}
-		docpad = @
+		nikeproto = @
 		{renderPasses} = @config
 		locale = @getLocale()
 
-		# Set the initial docpad template data
+		# Set the initial nikeproto template data
 		@initialTemplateData ?=
 			# Site Properties
 			site: {}
 
 			# Environment
 			getEnvironment: ->
-				return docpad.getEnvironment()
+				return nikeproto.getEnvironment()
 
 			# Environments
 			getEnvironments: ->
-				return docpad.getEnvironments()
+				return nikeproto.getEnvironments()
 
 			# Set that we reference other files
 			referencesOthers: (flag) ->
@@ -498,42 +498,42 @@ class DocPad extends EventEmitterEnhanced
 			# Get Files
 			getFiles: (query,sorting,paging) ->
 				@referencesOthers()
-				result = docpad.getFiles(query,sorting,paging)
+				result = nikeproto.getFiles(query,sorting,paging)
 				return result
 
 			# Get another file's URL based on a relative path
 			getFile: (query,sorting,paging) ->
 				@referencesOthers()
-				result = docpad.getFile(query,sorting,paging)
+				result = nikeproto.getFile(query,sorting,paging)
 				return result
 
 			# Get Files At Path
 			getFilesAtPath: (path,sorting,paging) ->
 				@referencesOthers()
 				path = @getPath(path)
-				result = docpad.getFilesAtPath(path,sorting,paging)
+				result = nikeproto.getFilesAtPath(path,sorting,paging)
 				return result
 
 			# Get another file's model based on a relative path
 			getFileAtPath: (relativePath) ->
 				@referencesOthers()
 				path = @getPath(relativePath)
-				result = docpad.getFileAtPath(path)
+				result = nikeproto.getFileAtPath(path)
 				return result
 
 			# Get the entire database
 			getDatabase: ->
 				@referencesOthers()
-				return docpad.getDatabase()
+				return nikeproto.getDatabase()
 
 			# Get a pre-defined collection
 			getCollection: (name) ->
 				@referencesOthers()
-				return docpad.getCollection(name)
+				return nikeproto.getCollection(name)
 
 			# Get a block
 			getBlock: (name) ->
-				return docpad.getBlock(name,true)
+				return nikeproto.getBlock(name,true)
 
 			# Include another file taking in a relative path
 			include: (subRelativePath,strict=true) ->
@@ -541,7 +541,7 @@ class DocPad extends EventEmitterEnhanced
 				if file
 					if strict and file.get('rendered') is false
 						if renderPasses is 1
-							docpad.warn util.format(locale.renderedEarlyViaInclude, subRelativePath)
+							nikeproto.warn util.format(locale.renderedEarlyViaInclude, subRelativePath)
 						return null
 					return file.getOutContent()
 				else
@@ -682,7 +682,7 @@ class DocPad extends EventEmitterEnhanced
 		plugins: {}
 
 		# Where to fetch the exchange information from
-		exchangeUrl: 'https://docpad.org/exchange.json'
+		exchangeUrl: 'https://nikeproto.org/exchange.json'
 
 
 		# -----------------------------
@@ -695,17 +695,17 @@ class DocPad extends EventEmitterEnhanced
 		packagePath: 'package.json'
 
 		# Where to get the latest package information from
-		latestPackageUrl: 'https://docpad.org/latest.json'
+		latestPackageUrl: 'https://nikeproto.org/latest.json'
 
 		# The project's configuration paths
 		# Reads only the first one that exists
 		# If you want to read multiple configuration paths, then point it to a coffee|js file that requires
 		# the other paths you want and exports the merged config
 		configPaths: [
-			'docpad.js'
-			'docpad.coffee'
-			'docpad.json'
-			'docpad.cson'
+			'nikeproto.js'
+			'nikeproto.coffee'
+			'nikeproto.json'
+			'nikeproto.cson'
 		]
 
 		# Plugin directories to load
@@ -776,9 +776,9 @@ class DocPad extends EventEmitterEnhanced
 		maxAge: 86400000
 
 		# Server
-		# The Express.js server that we want docpad to use
+		# The Express.js server that we want nikeproto to use
 		serverExpress: null
-		# The HTTP server that we want docpad to use
+		# The HTTP server that we want nikeproto to use
 		serverHttp: null
 
 		# Extend Server
@@ -819,12 +819,12 @@ class DocPad extends EventEmitterEnhanced
 		catchExceptions: true
 
 		# Report Errors
-		# Whether or not we should report our errors back to DocPad
+		# Whether or not we should report our errors back to NikeProto
 		# By default it is only enabled if we are not running inside a test
 		reportErrors: process.argv.join('').indexOf('test') is -1
 
 		# Report Statistics
-		# Whether or not we should report statistics back to DocPad
+		# Whether or not we should report statistics back to NikeProto
 		# By default it is only enabled if we are not running inside a test
 		reportStatistics: process.argv.join('').indexOf('test') is -1
 
@@ -857,7 +857,7 @@ class DocPad extends EventEmitterEnhanced
 		renderPasses: 1
 
 		# Check Version
-		# Whether or not to check for newer versions of DocPad
+		# Whether or not to check for newer versions of NikeProto
 		checkVersion: false
 
 		# Welcome
@@ -870,7 +870,7 @@ class DocPad extends EventEmitterEnhanced
 
 		# Helper Url
 		# Used for subscribing to newsletter, account information, and statistics etc
-		helperUrl: 'https://docpad.org/helper/'
+		helperUrl: 'https://nikeproto.org/helper/'
 
 		# Safe Mode
 		# If enabled, we will try our best to sandbox our template rendering so that they cannot modify things outside of them
@@ -914,9 +914,9 @@ class DocPad extends EventEmitterEnhanced
 				maxAge: false
 
 				# Only do these if we are running standalone (aka not included in a module)
-				checkVersion: process.argv.length >= 2 and /docpad$/.test(process.argv[1])
-				welcome: process.argv.length >= 2 and /docpad$/.test(process.argv[1])
-				prompts: process.argv.length >= 2 and /docpad$/.test(process.argv[1])
+				checkVersion: process.argv.length >= 2 and /nikeproto$/.test(process.argv[1])
+				welcome: process.argv.length >= 2 and /nikeproto$/.test(process.argv[1])
+				prompts: process.argv.length >= 2 and /nikeproto$/.test(process.argv[1])
 
 
 	# Regenerate Timer
@@ -935,22 +935,22 @@ class DocPad extends EventEmitterEnhanced
 	# =================================
 	# Initialization Functions
 
-	# Construct DocPad
+	# Construct NikeProto
 	# next(err)
 	constructor: (instanceConfig,next) ->
 		# Prepare
 		[instanceConfig,next] = balUtil.extractOptsAndCallback(instanceConfig,next)
-		docpad = @
+		nikeproto = @
 
-		# Allow DocPad to have unlimited event listeners
+		# Allow NikeProto to have unlimited event listeners
 		@setMaxListeners(0)
 
 		# Setup configuration event wrappers
-		configEventContext = {docpad}  # here to allow the config event context to persist between event calls
+		configEventContext = {nikeproto}  # here to allow the config event context to persist between event calls
 		@getEvents().forEach (eventName) ->
 			# Bind to the event
-			docpad.on eventName, (opts,next) ->
-				eventHandler = docpad.getConfig().events?[eventName]
+			nikeproto.on eventName, (opts,next) ->
+				eventHandler = nikeproto.getConfig().events?[eventName]
 				# Fire the config event handler for this event, if it exists
 				if typeChecker.isFunction(eventHandler)
 					args = [opts,next]
@@ -961,19 +961,19 @@ class DocPad extends EventEmitterEnhanced
 
 		# Create our action runner
 		@actionRunnerInstance = new TaskGroup().run().on 'complete', (err) ->
-			docpad.error(err)  if err
+			nikeproto.error(err)  if err
 
 		# Create our error runner
 		@errorRunnerInstance = new TaskGroup().run().on 'complete', (err) ->
-			if err and docpad.getDebugging()
-				locale = docpad.getLocale()
-				docpad.log('warn', locale.reportError+'\n'+locale.errorFollows, err)
+			if err and nikeproto.getDebugging()
+				locale = nikeproto.getLocale()
+				nikeproto.log('warn', locale.reportError+'\n'+locale.errorFollows, err)
 
 		# Create our track runner
 		@trackRunnerInstance = new TaskGroup().run().on 'complete', (err) ->
-			if err and docpad.getDebugging()
-				locale = docpad.getLocale()
-				docpad.log('warn', locale.trackError+'\n'+locale.errorFollows, err)
+			if err and nikeproto.getDebugging()
+				locale = nikeproto.getLocale()
+				nikeproto.log('warn', locale.trackError+'\n'+locale.errorFollows, err)
 
 		# Initialize the loggers
 		if (loggers = instanceConfig.loggers)
@@ -1001,12 +1001,12 @@ class DocPad extends EventEmitterEnhanced
 
 		# Log to bubbled events
 		@on 'log', (args...) ->
-			docpad.log.apply(@,args)
+			nikeproto.log.apply(@,args)
 
 		# Require canihaz
 		canihaz ?= require('canihaz')(
-			installation: docpad.corePath
-			location: docpad.packagePath
+			installation: nikeproto.corePath
+			location: nikeproto.packagePath
 			key: 'lazyDependencies'
 		)
 
@@ -1029,7 +1029,7 @@ class DocPad extends EventEmitterEnhanced
 
 				# Delete the urls
 				for url in model.get('urls') or []
-					delete docpad.filesByUrl[url]
+					delete nikeproto.filesByUrl[url]
 
 				# Ensure we regenerate anything (on the next regeneration) that was using the same outPath
 				outPath = model.get('outPath')
@@ -1043,11 +1043,11 @@ class DocPad extends EventEmitterEnhanced
 
 				# Delete the old urls
 				for url in model.previous('urls') or []
-					delete docpad.filesByUrl[url]
+					delete nikeproto.filesByUrl[url]
 
 				# Add the new urls
 				for url in urls
-					docpad.filesByUrl[url] = model.cid
+					nikeproto.filesByUrl[url] = model.cid
 			)
 			.on('change:outPath', (model,outPath,options) =>
 				# Skip if we are not a writeable file
@@ -1077,8 +1077,8 @@ class DocPad extends EventEmitterEnhanced
 						# We have a conflict, let the user know
 						modelPath = model.get('fullPath')
 						existingModelPath = existingModel.get('fullPath')
-						message =  util.format(docpad.getLocale().outPathConflict, outPath, modelPath, existingModelPath)
-						docpad.warn(message)
+						message =  util.format(nikeproto.getLocale().outPathConflict, outPath, modelPath, existingModelPath)
+						nikeproto.warn(message)
 					else
 						# There reference was old, update it with our new one
 						@filesByOutPath[outPath] = model.id
@@ -1096,10 +1096,10 @@ class DocPad extends EventEmitterEnhanced
 		# Check if we want to perform an action
 		if action
 			@action action, instanceConfig, (err) ->
-				return docpad.fatal(err)  if err
-				next?(null,docpad)
+				return nikeproto.fatal(err)  if err
+				next?(null,nikeproto)
 		else
-			next?(null,docpad)
+			next?(null,nikeproto)
 
 		# Chain
 		@
@@ -1143,11 +1143,11 @@ class DocPad extends EventEmitterEnhanced
 	# Setup and Loading
 
 	# Ready
-	# next(err,docpadInstance)
+	# next(err,nikeprotoInstance)
 	ready: (opts,next) =>
 		# Prepare
 		[instanceConfig,next] = balUtil.extractOptsAndCallback(instanceConfig,next)
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		locale = @getLocale()
 		mixpanelInstance = @getMixpanelInstance()
@@ -1172,10 +1172,10 @@ class DocPad extends EventEmitterEnhanced
 		# Prepare
 		tasks = new TaskGroup().once 'complete', (err) ->
 			# Error?
-			return docpad.error(err)  if err
+			return nikeproto.error(err)  if err
 
-			# All done, forward our DocPad instance onto our creator
-			return next?(null,docpad)
+			# All done, forward our NikeProto instance onto our creator
+			return next?(null,nikeproto)
 
 		# Welcome Event
 		tasks.addTask (complete) =>
@@ -1183,7 +1183,7 @@ class DocPad extends EventEmitterEnhanced
 			return complete()  unless config.welcome
 
 			# Welcome
-			@emitSync('welcome', {docpad}, complete)
+			@emitSync('welcome', {nikeproto}, complete)
 
 		# Anyomous
 		# Ignore errors
@@ -1242,9 +1242,9 @@ class DocPad extends EventEmitterEnhanced
 				# Update the existing user's information witht he latest
 				mixpanelInstance.people.set(@userConfig.username, userData)
 
-		# DocPad Ready
+		# NikeProto Ready
 		tasks.addTask (complete) =>
-			@emitSync('docpadReady', {docpad}, complete)
+			@emitSync('nikeprotoReady', {nikeproto}, complete)
 
 		# Run tasks
 		tasks.run()
@@ -1284,7 +1284,7 @@ class DocPad extends EventEmitterEnhanced
 	setConfig: (instanceConfig,next) =>
 		# Prepare
 		[instanceConfig,next] = balUtil.extractOptsAndCallback(instanceConfig,next)
-		docpad = @
+		nikeproto = @
 
 		# Apply the instance configuration, generally we won't have it at this level
 		# as it would have been applied earlier the load step
@@ -1293,13 +1293,13 @@ class DocPad extends EventEmitterEnhanced
 		# Apply the environment
 		# websitePackageConfig.env is left out of the detection here as it is usually an object
 		# that is already merged with our process.env by the environment runner
-		# rather than a string which is the docpad convention
+		# rather than a string which is the nikeproto convention
 		@config.env = @instanceConfig.env or @websiteConfig.env or @initialConfig.env or process.env.NODE_ENV
 
 		# Merge configurations
 		configPackages = [@initialConfig, @userConfig, @websiteConfig, @instanceConfig]
 		configsToMerge = [@config]
-		docpad.mergeConfigurations(configPackages,configsToMerge)
+		nikeproto.mergeConfigurations(configPackages,configsToMerge)
 
 		# Extract and apply the server
 		@setServer(@config.server)  if @config.server
@@ -1337,8 +1337,8 @@ class DocPad extends EventEmitterEnhanced
 		if @config.regenerateEvery
 			@regenerateTimer = setInterval(
 				->
-					docpad.log('info', locale.renderInterval)
-					docpad.action('generate')
+					nikeproto.log('info', locale.renderInterval)
+					nikeproto.action('generate')
 				@config.regenerateEvery
 			)
 
@@ -1353,7 +1353,7 @@ class DocPad extends EventEmitterEnhanced
 
 		# Load Plugins
 		postTasks.addTask (complete) ->
-			docpad.loadPlugins(complete)
+			nikeproto.loadPlugins(complete)
 
 		# Extend collections
 		postTasks.addTask (complete) =>
@@ -1363,9 +1363,9 @@ class DocPad extends EventEmitterEnhanced
 		postTasks.addTask (complete) =>
 			@emitSync('extendTemplateData', {templateData:@pluginsTemplateData}, complete)
 
-		# Fire the docpadLoaded event
+		# Fire the nikeprotoLoaded event
 		postTasks.addTask (complete) =>
-			@emitSync('docpadLoaded', {}, complete)
+			@emitSync('nikeprotoLoaded', {}, complete)
 
 		# Fire post tasks
 		postTasks.run()
@@ -1379,7 +1379,7 @@ class DocPad extends EventEmitterEnhanced
 	load: (instanceConfig,next) =>
 		# Prepare
 		[instanceConfig,next] = balUtil.extractOptsAndCallback(instanceConfig,next)
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		instanceConfig or= {}
 
@@ -1417,7 +1417,7 @@ class DocPad extends EventEmitterEnhanced
 				# Done loading
 				return complete()
 
-		# Load DocPad's Package Configuration
+		# Load NikeProto's Package Configuration
 		preTasks.addTask (complete) =>
 			@loadConfigPath @packagePath, (err,data) =>
 				return complete(err)  if err
@@ -1483,7 +1483,7 @@ class DocPad extends EventEmitterEnhanced
 	install: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 
 		# Re-Initialise the Website's modules
 		@initNodeModules(
@@ -1494,7 +1494,7 @@ class DocPad extends EventEmitterEnhanced
 				return next(err)  if err
 
 				# Re-load configuration
-				docpad.load (err) ->
+				nikeproto.load (err) ->
 					# Forward
 					return next(err)
 		)
@@ -1507,15 +1507,15 @@ class DocPad extends EventEmitterEnhanced
 	clean: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		{rootPath,outPath} = @config
 
 		# Log
-		docpad.log 'debug', locale.renderCleaning
+		nikeproto.log 'debug', locale.renderCleaning
 
 		# Clean collections
-		docpad.resetCollections (err) ->
+		nikeproto.resetCollections (err) ->
 			# Check
 			return next(err)  if err
 
@@ -1527,7 +1527,7 @@ class DocPad extends EventEmitterEnhanced
 			else
 				# our outPath is not related or lower than our root path, so do remove it
 				balUtil.rmdirDeep outPath, (err,list,tree) ->
-					docpad.log('debug', locale.renderCleaned)  unless err
+					nikeproto.log('debug', locale.renderCleaned)  unless err
 					return next()
 
 		# Chain
@@ -1541,7 +1541,7 @@ class DocPad extends EventEmitterEnhanced
 	updateUserConfig: (data={},next) ->
 		# Prepare
 		[data,next] = balUtil.extractOptsAndCallback(data,next)
-		docpad = @
+		nikeproto = @
 		userConfigPath = @userConfigPath
 
 		# Apply back to our loaded configuration
@@ -1604,7 +1604,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err,parsedData)
 	loadConfigPaths: (configPaths,next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		result = null
 
 		# Ensure array
@@ -1619,7 +1619,7 @@ class DocPad extends EventEmitterEnhanced
 		configPaths.forEach (configPath) ->
 			tasks.addTask (complete) ->
 				return complete()  if result
-				docpad.loadConfigPath configPath, (err,config) ->
+				nikeproto.loadConfigPath configPath, (err,config) ->
 					return complete(err)  if err
 					if config
 						result = config
@@ -1637,7 +1637,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	extendCollections: (next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		config = @config
 		locale = @getLocale()
 		database = @getDatabase()
@@ -1652,7 +1652,7 @@ class DocPad extends EventEmitterEnhanced
 						fullPath: $startsWith: config.documentsPaths
 				})
 				.on('add', (model) ->
-					docpad.log('debug', util.format(locale.addingDocument, model.attributes.fullPath))
+					nikeproto.log('debug', util.format(locale.addingDocument, model.attributes.fullPath))
 					model.setDefaults({
 						isDocument: true
 						render: true
@@ -1666,7 +1666,7 @@ class DocPad extends EventEmitterEnhanced
 						fullPath: $startsWith: config.filesPaths
 				})
 				.on('add', (model) ->
-					docpad.log('debug', util.format(locale.addingFile, model.attributes.fullPath))
+					nikeproto.log('debug', util.format(locale.addingFile, model.attributes.fullPath))
 					model.setDefaults({
 						isFile: true
 						render: false
@@ -1680,7 +1680,7 @@ class DocPad extends EventEmitterEnhanced
 						fullPath: $startsWith: config.layoutsPaths
 				})
 				.on('add', (model) ->
-					docpad.log('debug', util.format(locale.addingLayout, model.attributes.fullPath))
+					nikeproto.log('debug', util.format(locale.addingLayout, model.attributes.fullPath))
 					model.setDefaults({
 						isLayout: true
 						render: false
@@ -1697,7 +1697,7 @@ class DocPad extends EventEmitterEnhanced
 					outExtension: 'html'
 				})
 				.on('add', (model) ->
-					docpad.log('debug', util.format(locale.addingHtml, model.attributes.fullPath))
+					nikeproto.log('debug', util.format(locale.addingHtml, model.attributes.fullPath))
 				)
 			stylesheet: database.createLiveChildCollection()
 				.setQuery('isStylesheet', {
@@ -1712,7 +1712,7 @@ class DocPad extends EventEmitterEnhanced
 					]
 				})
 				.on('add', (model) ->
-					docpad.log('debug', util.format(locale.addingStylesheet, model.attributes.fullPath))
+					nikeproto.log('debug', util.format(locale.addingStylesheet, model.attributes.fullPath))
 					model.setDefaults({
 						referencesOthers: true
 					})
@@ -1728,26 +1728,26 @@ class DocPad extends EventEmitterEnhanced
 
 		# Custom Collections Group
 		tasks = new TaskGroup().setConfig(concurrency:0).once 'complete', (err) ->
-			docpad.error(err)  if err
-			docpad.emitSync('extendCollections',{},next)
+			nikeproto.error(err)  if err
+			nikeproto.emitSync('extendCollections',{},next)
 
 		# Cycle through Custom Collections
 		eachr @config.collections or {}, (fn,name) ->
 			tasks.addTask (complete) ->
 				if fn.length is 2 # callback
-					fn.call docpad, database, (err,collection) ->
-						docpad.error(err)  if err
+					fn.call nikeproto, database, (err,collection) ->
+						nikeproto.error(err)  if err
 						# make it a live collection
 						collection.live(true)  if collection
 						# apply the collection
-						docpad.setCollection(name,collection)
+						nikeproto.setCollection(name,collection)
 						complete()
 				else
-					collection = fn.call(docpad,database)
+					collection = fn.call(nikeproto,database)
 					# make it a live collection
 					collection.live(true)  if collection
 					# apply the collection
-					docpad.setCollection(name,collection)
+					nikeproto.setCollection(name,collection)
 					complete()
 
 		# Run Custom collections
@@ -1760,7 +1760,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	resetCollections: (next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		database = @getDatabase()
 
 		# Update the cached database
@@ -1769,7 +1769,7 @@ class DocPad extends EventEmitterEnhanced
 		# Perform a complete clean of our collections
 		database.reset([])
 		@getBlock('meta').reset([]).add([
-			"""<meta http-equiv="X-Powered-By" content="DocPad v#{docpad.version}"/>"""
+			"""<meta http-equiv="X-Powered-By" content="NikeProto v#{nikeproto.version}"/>"""
 		])
 		@getBlock('scripts').reset([])
 		@getBlock('styles').reset([])
@@ -1836,7 +1836,7 @@ class DocPad extends EventEmitterEnhanced
 
 	# Handle a fatal error
 	fatal: (err) =>
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		return @  unless err
 		@error err, 'err', ->
@@ -1855,7 +1855,7 @@ class DocPad extends EventEmitterEnhanced
 	# Handle an error
 	error: (err,type='err',next) =>
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Check
@@ -1867,16 +1867,16 @@ class DocPad extends EventEmitterEnhanced
 		err.logged = true
 		err = new Error(err)  unless err.message?
 		err.logged = true
-		docpad.log(type, locale.errorOccured, '\n'+(err.stack ? err.message))
-		docpad.notify(err.message, title:locale.errorOccured)
+		nikeproto.log(type, locale.errorOccured, '\n'+(err.stack ? err.message))
+		nikeproto.notify(err.message, title:locale.errorOccured)
 
 		# Check
 		airbrake = @getAirbrakeInstance()
 		if airbrake
 			# Prepare
 			err.params =
-				docpadVersion: @version
-				docpadConfig: @config
+				nikeprotoVersion: @version
+				nikeprotoConfig: @config
 			# Apply
 			@getErrorRunner().addTask (complete) ->
 				airbrake.notify err, (airbrakeErr,airbrakeUrl) ->
@@ -1894,13 +1894,13 @@ class DocPad extends EventEmitterEnhanced
 	# Handle a warning
 	warn: (message,err,next) =>
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Log
-		docpad.log('warn', message)
-		docpad.error(err, 'warn', next)  if err
-		docpad.notify(message, title:locale.warnOccured)
+		nikeproto.log('warn', message)
+		nikeproto.error(err, 'warn', next)  if err
+		nikeproto.notify(message, title:locale.warnOccured)
 
 		# Chain
 		@
@@ -1908,7 +1908,7 @@ class DocPad extends EventEmitterEnhanced
 	# Perform a growl notification
 	notify: (message,opts) =>
 		# Prepare
-		docpad = @
+		nikeproto = @
 
 		# Check
 		growl = @getGrowlInstance()
@@ -1954,7 +1954,7 @@ class DocPad extends EventEmitterEnhanced
 	# Instantiate a File
 	createFile: (data={},options={}) =>
 		# Prepare
-		docpad = @
+		nikeproto = @
 		options = extendr.extend({
 			detectEncoding: @config.detectEncoding
 			outDirPath: @config.outPath
@@ -1965,11 +1965,11 @@ class DocPad extends EventEmitterEnhanced
 
 		# Log
 		file.on 'log', (args...) ->
-			docpad.log(args...)
+			nikeproto.log(args...)
 
 		# Render
 		file.on 'render', (args...) ->
-			docpad.emitSync('render', args...)
+			nikeproto.emitSync('render', args...)
 
 		# Return
 		file
@@ -1977,7 +1977,7 @@ class DocPad extends EventEmitterEnhanced
 	# Instantiate a Document
 	createDocument: (data={},options={}) =>
 		# Prepare
-		docpad = @
+		nikeproto = @
 		options = extendr.extend({
 			detectEncoding: @config.detectEncoding
 			outDirPath: @config.outPath
@@ -1988,21 +1988,21 @@ class DocPad extends EventEmitterEnhanced
 
 		# Log
 		document.on 'log', (args...) ->
-			docpad.log(args...)
+			nikeproto.log(args...)
 
 		# Fetch a layout
 		document.on 'getLayout', (opts={},next) ->
-			opts.collection = docpad.getCollection('layouts')
-			layout = docpad.getFileBySelector(opts.selector,opts)
+			opts.collection = nikeproto.getCollection('layouts')
+			layout = nikeproto.getFileBySelector(opts.selector,opts)
 			next(null,{layout})
 
 		# Render
 		document.on 'render', (args...) ->
-			docpad.emitSync('render', args...)
+			nikeproto.emitSync('render', args...)
 
 		# Render document
 		document.on 'renderDocument', (args...) ->
-			docpad.emitSync('renderDocument', args...)
+			nikeproto.emitSync('renderDocument', args...)
 
 		# Return
 		document
@@ -2027,7 +2027,7 @@ class DocPad extends EventEmitterEnhanced
 
 	# Ensure File or Document
 	ensureFileOrDocument: (data={},options={}) =>
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		database = @getDatabase()
 		fileFullPath = data.fullPath or null
@@ -2078,7 +2078,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	parseDirectory: (opts={},next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Extract
@@ -2088,13 +2088,13 @@ class DocPad extends EventEmitterEnhanced
 		# Check if the directory exists
 		unless safefs.existsSync(path)
 			# Log
-			docpad.log 'debug', util.format(locale.renderDirectoryNonexistant, path)
+			nikeproto.log 'debug', util.format(locale.renderDirectoryNonexistant, path)
 
 			# Forward
 			return next()
 
 		# Log
-		docpad.log 'debug', util.format(locale.renderDirectoryParsing, path)
+		nikeproto.log 'debug', util.format(locale.renderDirectoryParsing, path)
 
 		# Files
 		@scandir(
@@ -2123,10 +2123,10 @@ class DocPad extends EventEmitterEnhanced
 				return next(err)  if err
 
 				# Log
-				docpad.log 'debug', util.format(locale.renderDirectoryParsed, path)
+				nikeproto.log 'debug', util.format(locale.renderDirectoryParsed, path)
 
 				# Load the files
-				docpad.loadFiles {collection:filesToLoad}, (err) ->
+				nikeproto.loadFiles {collection:filesToLoad}, (err) ->
 					# Forward
 					return next(err)
 		)
@@ -2150,17 +2150,17 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	loadPlugins: (next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Snore
 		@slowPlugins = {}
 		snore = balUtil.createSnore ->
-			docpad.log 'notice', util.format(locale.pluginsSlow, Object.keys(docpad.slowPlugins).join(', '))
+			nikeproto.log 'notice', util.format(locale.pluginsSlow, Object.keys(nikeproto.slowPlugins).join(', '))
 
 		# Async
 		tasks = new TaskGroup().setConfig(concurrency:0).once 'complete', (err) ->
-			docpad.slowPlugins = {}
+			nikeproto.slowPlugins = {}
 			snore.clear()
 			return next(err)
 
@@ -2189,10 +2189,10 @@ class DocPad extends EventEmitterEnhanced
 	# next(err,loaded)
 	loadedPlugin: (pluginName,next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 
 		# Check
-		loaded = docpad.loadedPlugins[pluginName]?
+		loaded = nikeproto.loadedPlugins[pluginName]?
 		next(null,loaded)
 
 		# Chain
@@ -2202,19 +2202,19 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	loadPlugin: (fileFullPath,_next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		locale = @getLocale()
 		next = (err) ->
 			# Remove from slow plugins
-			delete docpad.slowPlugins[pluginName]
+			delete nikeproto.slowPlugins[pluginName]
 			# Forward
 			return _next(err)
 
 		# Prepare variables
 		loader = new PluginLoader(
 			dirPath: fileFullPath
-			docpad: @
+			nikeproto: @
 			BasePlugin: BasePlugin
 		)
 		pluginName = loader.pluginName
@@ -2224,23 +2224,23 @@ class DocPad extends EventEmitterEnhanced
 		)
 
 		# If we've already been loaded, then exit early as there is no use for us to load again
-		if docpad.loadedPlugins[pluginName]?
+		if nikeproto.loadedPlugins[pluginName]?
 			# However we probably want to reload the configuration as perhaps the user or environment configuration has changed
-			docpad.loadedPlugins[pluginName].setConfig()
+			nikeproto.loadedPlugins[pluginName].setConfig()
 			# Complete
 			return _next()
 
 		# Add to loading stores
-		docpad.slowPlugins[pluginName] = true
+		nikeproto.slowPlugins[pluginName] = true
 
 		# Check
 		unless enabled
 			# Skip
-			docpad.log 'debug', util.format(locale.pluginSkipped, pluginName)
+			nikeproto.log 'debug', util.format(locale.pluginSkipped, pluginName)
 			return next()
 		else
 			# Load
-			docpad.log 'debug', util.format(locale.pluginLoading, pluginName)
+			nikeproto.log 'debug', util.format(locale.pluginLoading, pluginName)
 
 			# Check existance
 			loader.exists (err,exists) ->
@@ -2256,15 +2256,15 @@ class DocPad extends EventEmitterEnhanced
 					if unsupported
 						# Version?
 						if unsupported is 'version' and config.skipUnsupportedPlugins is false
-							docpad.log 'warn', util.format(locale.pluginContinued, pluginName)
+							nikeproto.log 'warn', util.format(locale.pluginContinued, pluginName)
 						else
 							# Type?
 							if unsupported is 'type'
-								docpad.log 'debug', util.format(locale.pluginSkippedDueTo, pluginName, unsupported)
+								nikeproto.log 'debug', util.format(locale.pluginSkippedDueTo, pluginName, unsupported)
 
 							# Something else?
 							else
-								docpad.log 'warn', util.format(locale.pluginSkippedDueTo, pluginName, unsupported)
+								nikeproto.log 'warn', util.format(locale.pluginSkippedDueTo, pluginName, unsupported)
 							return next()
 
 					# Load the class
@@ -2276,10 +2276,10 @@ class DocPad extends EventEmitterEnhanced
 							return next(err)  if err
 
 							# Add to plugin stores
-							docpad.loadedPlugins[loader.pluginName] = pluginInstance
+							nikeproto.loadedPlugins[loader.pluginName] = pluginInstance
 
 							# Log completion
-							docpad.log 'debug', util.format(locale.pluginLoaded, pluginName)
+							nikeproto.log 'debug', util.format(locale.pluginLoaded, pluginName)
 
 							# Forward
 							return next()
@@ -2291,11 +2291,11 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	loadPluginsIn: (pluginsPath, next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Load Plugins
-		docpad.log 'debug', util.format(locale.pluginsLoadingFor, pluginsPath)
+		nikeproto.log 'debug', util.format(locale.pluginsLoadingFor, pluginsPath)
 		@scandir(
 			# Path
 			path: pluginsPath
@@ -2310,16 +2310,16 @@ class DocPad extends EventEmitterEnhanced
 				return _nextFile(null,false)  if fileFullPath is pluginsPath
 				nextFile = (err,skip) ->
 					if err
-						docpad.warn(util.format(locale.pluginFailedToLoad, pluginName, fileFullPath)+'\n'+locale.errorFollows, err)
+						nikeproto.warn(util.format(locale.pluginFailedToLoad, pluginName, fileFullPath)+'\n'+locale.errorFollows, err)
 					return _nextFile(null,skip)
 
 				# Forward
-				docpad.loadPlugin fileFullPath, (err) ->
+				nikeproto.loadPlugin fileFullPath, (err) ->
 					return nextFile(err,true)
 
 			# Next
 			next: (err) ->
-				docpad.log 'debug', util.format(locale.pluginsLoadedFor, pluginsPath)
+				nikeproto.log 'debug', util.format(locale.pluginsLoadedFor, pluginsPath)
 				return next(err)
 		)
 
@@ -2333,12 +2333,12 @@ class DocPad extends EventEmitterEnhanced
 	# ---------------------------------
 	# Utilities: Misc
 
-	# Compare current DocPad version to the latest
+	# Compare current NikeProto version to the latest
 	compareVersion: ->
 		return @  unless @config.checkVersion
 
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 
 		# Check
@@ -2346,8 +2346,8 @@ class DocPad extends EventEmitterEnhanced
 			local: @packagePath
 			remote: @config.latestPackageUrl
 			newVersionCallback: (details) ->
-				docpad.notify locale.upgradeNotification
-				docpad.log 'notice', util.format(locale.upgradeDetails, details.local.version, details.remote.version, details.local.upgradeUrl or details.remote.installUrl or details.remote.homepage)
+				nikeproto.notify locale.upgradeNotification
+				nikeproto.log 'notice', util.format(locale.upgradeDetails, details.local.version, details.remote.version, details.local.upgradeUrl or details.remote.installUrl or details.remote.homepage)
 		)
 
 		# Chain
@@ -2363,7 +2363,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err,exchange)
 	getExchange: (next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 
 		# Check if it is stored locally
 		return next(null,@exchange)  unless typeChecker.isEmptyObject(@exchange)
@@ -2373,8 +2373,8 @@ class DocPad extends EventEmitterEnhanced
 		@loadConfigUrl exchangeUrl, (err,parsedData) ->
 			# Check
 			if err
-				locale = docpad.getLocale()
-				docpad.log('notice', locale.exchangeError+'\n'+locale.errorFollows, err)
+				locale = nikeproto.getLocale()
+				nikeproto.log('notice', locale.exchangeError+'\n'+locale.errorFollows, err)
 				return next()
 
 			# Success
@@ -2392,7 +2392,7 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	installSkeleton: (skeletonModel,destinationPath,next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		packagePath = pathUtil.join(destinationPath, 'package.json')
 
 		# Configure
@@ -2404,15 +2404,15 @@ class DocPad extends EventEmitterEnhanced
 			output: true
 			next: (err) ->
 				# Error?
-				return docpad.error(err)  if err
+				return nikeproto.error(err)  if err
 
 				# Initialise the Website's modules for the first time
-				docpad.initNodeModules(
+				nikeproto.initNodeModules(
 					path: destinationPath
 					output: true
 					next: (err) ->
 						# Error?
-						return docpad.error(err)  if err
+						return nikeproto.error(err)  if err
 
 						# Done
 						return next()
@@ -2421,10 +2421,10 @@ class DocPad extends EventEmitterEnhanced
 		# Check if the skeleton path already exists
 		safefs.ensurePath destinationPath, (err) ->
 			# Error?
-			return docpad.error(err)  if err
+			return nikeproto.error(err)  if err
 
 			# Initalize the git repository
-			docpad.initGitRepo(repoConfig)
+			nikeproto.initGitRepo(repoConfig)
 
 		# Chain
 		@
@@ -2439,20 +2439,20 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	loadFiles: (opts={},next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		database = @getDatabase()
 		{collection} = opts
 
 		# Log
-		docpad.log 'debug', util.format(locale.loadingFiles, collection.length)
+		nikeproto.log 'debug', util.format(locale.loadingFiles, collection.length)
 
 		# Async
 		tasks = new TaskGroup().setConfig(concurrency:0).once 'complete', (err) ->
 			return next(err)  if err
 			# After
-			docpad.emitSync 'loadAfter', {collection}, (err) ->
-				docpad.log 'debug', util.format(locale.loadedFiles, collection.length)
+			nikeproto.emitSync 'loadAfter', {collection}, (err) ->
+				nikeproto.log 'debug', util.format(locale.loadedFiles, collection.length)
 				next()
 
 		# Fetch
@@ -2461,13 +2461,13 @@ class DocPad extends EventEmitterEnhanced
 			fileRelativePath = file.get('relativePath')
 
 			# Log
-			docpad.log 'debug', util.format(locale.loadingFile, fileRelativePath)
+			nikeproto.log 'debug', util.format(locale.loadingFile, fileRelativePath)
 
 			# Load the file
 			file.load (err) ->
 				# Check
 				if err
-					docpad.warn(util.format(locale.loadingFileFailed, fileRelativePath)+"\n"+locale.errorFollows, err)
+					nikeproto.warn(util.format(locale.loadingFileFailed, fileRelativePath)+"\n"+locale.errorFollows, err)
 					return complete()
 
 				# Prepare
@@ -2476,11 +2476,11 @@ class DocPad extends EventEmitterEnhanced
 
 				# Ignored?
 				if fileIgnored or (fileParse? and !fileParse)
-					docpad.log 'info', util.format(locale.loadingFileIgnored, fileRelativePath)
+					nikeproto.log 'info', util.format(locale.loadingFileIgnored, fileRelativePath)
 					collection.remove(file)
 					return complete()
 				else
-					docpad.log 'debug', util.format(locale.loadedFile, fileRelativePath)
+					nikeproto.log 'debug', util.format(locale.loadedFile, fileRelativePath)
 
 				# Store Document
 				database.add(file)
@@ -2489,7 +2489,7 @@ class DocPad extends EventEmitterEnhanced
 				return complete()
 
 		# Start contextualizing
-		docpad.emitSync 'loadBefore', {collection}, (err) ->
+		nikeproto.emitSync 'loadBefore', {collection}, (err) ->
 			return next(err)  if err
 			tasks.run()
 
@@ -2500,20 +2500,20 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	contextualizeFiles: (opts={},next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		{collection,templateData} = opts
 
 		# Log
-		docpad.log 'debug', util.format(locale.contextualizingFiles, collection.length)
+		nikeproto.log 'debug', util.format(locale.contextualizingFiles, collection.length)
 
 		# Async
 		tasks = new TaskGroup().setConfig(concurrency:0).once 'complete', (err) ->
 			return next(err)  if err
 			# After
-			docpad.emitSync 'contextualizeAfter', {collection}, (err) ->
+			nikeproto.emitSync 'contextualizeAfter', {collection}, (err) ->
 				return next(err)  if err
-				docpad.log 'debug', util.format(locale.contextualizedFiles, collection.length)
+				nikeproto.log 'debug', util.format(locale.contextualizedFiles, collection.length)
 				return next()
 
 		# Fetch
@@ -2524,7 +2524,7 @@ class DocPad extends EventEmitterEnhanced
 				return complete(err)
 
 		# Start contextualizing
-		docpad.emitSync 'contextualizeBefore', {collection,templateData}, (err) ->
+		nikeproto.emitSync 'contextualizeBefore', {collection,templateData}, (err) ->
 			return next(err)  if err
 			tasks.run()
 
@@ -2535,20 +2535,20 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	renderFiles: (opts={},next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		{collection,templateData,renderPasses} = opts
 
 		# Log
-		docpad.log 'debug', util.format(locale.renderingFiles, collection.length)
+		nikeproto.log 'debug', util.format(locale.renderingFiles, collection.length)
 
 		# Async
 		tasks = new TaskGroup().once 'complete', (err) ->
 			return next(err)  if err
 			# After
-			docpad.emitSync 'renderAfter', {collection}, (err) ->
+			nikeproto.emitSync 'renderAfter', {collection}, (err) ->
 				return next(err)  if err
-				docpad.log 'debug', util.format(locale.renderedFiles, collection.length)
+				nikeproto.log 'debug', util.format(locale.renderedFiles, collection.length)
 				return next()
 
 		# Render File
@@ -2597,7 +2597,7 @@ class DocPad extends EventEmitterEnhanced
 				renderCollection(subsequentCollection, {renderPass}, complete)
 
 		# Fire the queue
-		docpad.emitSync 'renderBefore', {collection,templateData}, (err) =>
+		nikeproto.emitSync 'renderBefore', {collection,templateData}, (err) =>
 			return next(err)  if err
 			tasks.run()
 
@@ -2608,20 +2608,20 @@ class DocPad extends EventEmitterEnhanced
 	# next(err)
 	writeFiles: (opts={},next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		{collection,templateData} = opts
 
 		# Log
-		docpad.log 'debug', util.format(locale.writingFiles, collection.length)
+		nikeproto.log 'debug', util.format(locale.writingFiles, collection.length)
 
 		# Async
 		tasks = new TaskGroup().setConfig(concurrency:0).once 'complete', (err) ->
 			return next(err)  if err
 			# After
-			docpad.emitSync 'writeAfter', {collection}, (err) ->
+			nikeproto.emitSync 'writeAfter', {collection}, (err) ->
 				return next(err)  if err
-				docpad.log 'debug', util.format(locale.wroteFiles, collection.length)
+				nikeproto.log 'debug', util.format(locale.wroteFiles, collection.length)
 				return next()
 
 		# Cycle
@@ -2647,7 +2647,7 @@ class DocPad extends EventEmitterEnhanced
 				finish(err)
 
 		#  Start writing
-		docpad.emitSync 'writeBefore', {collection,templateData}, (err) =>
+		nikeproto.emitSync 'writeBefore', {collection,templateData}, (err) =>
 			return next(err)  if err
 			tasks.run()
 
@@ -2663,7 +2663,7 @@ class DocPad extends EventEmitterEnhanced
 	action: (action,opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		runner = @getActionRunner()
 		locale = @getLocale()
 
@@ -2683,16 +2683,16 @@ class DocPad extends EventEmitterEnhanced
 			tasks = new TaskGroup().once 'complete', (err) ->
 				return next(err)
 			actions.forEach (action) -> tasks.addTask (complete) ->
-				docpad.action(action,opts,complete)
+				nikeproto.action(action,opts,complete)
 			tasks.run()
-			return docpad
+			return nikeproto
 
 		# Log
 		@log 'debug', util.format(locale.actionStart, action)
 
 		# Next
 		next ?= (err) ->
-			docpad.fatal(err)  if err
+			nikeproto.fatal(err)  if err
 		forward = (args...) =>
 			@log 'debug', util.format(locale.actionFinished, action)
 			process.nextTick -> next(args...)  # not sure why we do this, but we do
@@ -2700,11 +2700,11 @@ class DocPad extends EventEmitterEnhanced
 		# Wrap
 		runner.addTask (complete) ->
 			# Fetch
-			fn = docpad[action]
+			fn = nikeproto[action]
 			# Check
 			return complete(new Error(util.format(locale.actionNonexistant, action)))  unless fn
 			# Track
-			docpad.track(action)
+			nikeproto.track(action)
 			# Forward
 			fn opts, (args...) ->
 				forward(args...)
@@ -2723,16 +2723,16 @@ class DocPad extends EventEmitterEnhanced
 	generatePrepare: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		locale = @getLocale()
 
 		# Update generating flag
-		docpad.generating = true
+		nikeproto.generating = true
 
 		# Log generating
-		docpad.log 'info', locale.renderGenerating
-		docpad.notify (new Date()).toLocaleTimeString(), title: locale.renderGeneratingNotification
+		nikeproto.log 'info', locale.renderGenerating
+		nikeproto.notify (new Date()).toLocaleTimeString(), title: locale.renderGeneratingNotification
 
 		# Tasks
 		tasks = new TaskGroup().once('complete',next)
@@ -2740,8 +2740,8 @@ class DocPad extends EventEmitterEnhanced
 		# Perform a complete clean of our collections if we want to
 		if opts.reset is true
 			# Check plugin count
-			unless docpad.hasPlugins()
-				docpad.log('notice', locale.renderNoPlugins)
+			unless nikeproto.hasPlugins()
+				nikeproto.log('notice', locale.renderNoPlugins)
 
 			# Check if the source directory exists
 			tasks.addTask (complete) ->
@@ -2755,11 +2755,11 @@ class DocPad extends EventEmitterEnhanced
 
 			# Clean our collections
 			tasks.addTask (complete) ->
-				docpad.resetCollections(complete)
+				nikeproto.resetCollections(complete)
 
 		# Fire plugins
 		tasks.addTask (complete) ->
-			docpad.emitSync('generateBefore', {reset:opts.reset, server:docpad.getServer()}, complete)
+			nikeproto.emitSync('generateBefore', {reset:opts.reset, server:nikeproto.getServer()}, complete)
 
 		# Run
 		tasks.run()
@@ -2773,7 +2773,7 @@ class DocPad extends EventEmitterEnhanced
 	generateParse: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		database = @getDatabase()
 		config = @getConfig()
 		locale = @getLocale()
@@ -2783,34 +2783,34 @@ class DocPad extends EventEmitterEnhanced
 			return next(err)  if err
 
 			# Log
-			docpad.log 'debug', locale.renderParsing
+			nikeproto.log 'debug', locale.renderParsing
 
 			# Async
 			tasks = new TaskGroup().setConfig(concurrency:0).once 'complete', (err) ->
 				return next(err)  if err
 				# After
-				docpad.emitSync 'parseAfter', {}, (err) ->
+				nikeproto.emitSync 'parseAfter', {}, (err) ->
 					return next(err)  if err
-					docpad.log 'debug', locale.renderParsed
+					nikeproto.log 'debug', locale.renderParsed
 					return next(err)
 
 			# Documents
 			config.documentsPaths.forEach (documentsPath) -> tasks.addTask (complete) ->
-				docpad.parseDocumentDirectory({
+				nikeproto.parseDocumentDirectory({
 					path: documentsPath
 					collection: database
 				},complete)
 
 			# Files
 			config.filesPaths.forEach (filesPath) -> tasks.addTask (complete) ->
-				docpad.parseFileDirectory({
+				nikeproto.parseFileDirectory({
 					path: filesPath
 					collection: database
 				},complete)
 
 			# Layouts
 			config.layoutsPaths.forEach (layoutsPath) -> tasks.addTask (complete) ->
-				docpad.parseDocumentDirectory({
+				nikeproto.parseDocumentDirectory({
 					path: layoutsPath
 					collection: database
 				},complete)
@@ -2827,14 +2827,14 @@ class DocPad extends EventEmitterEnhanced
 	generateRender: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		opts.templateData or= @getTemplateData()
 		opts.collection or= @getDatabase()
 		opts.renderPasses or= @getConfig().renderPasses
 
 		# Contextualize the datbaase, perform two render passes, and perform a write
 		balUtil.flow(
-			object: docpad
+			object: nikeproto
 			action: 'contextualizeFiles renderFiles writeFiles'
 			args: [opts]
 			next: (err) ->
@@ -2850,32 +2850,32 @@ class DocPad extends EventEmitterEnhanced
 	generatePostpare: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		locale = @getLocale()
 		database = @getDatabase()
 		collection = opts.collection or database
 
 		# Update generating flag
-		docpad.generating = false
-		docpad.generateEnded = new Date()
+		nikeproto.generating = false
+		nikeproto.generateEnded = new Date()
 
 		# Update caches
-		docpad.databaseCache = null
+		nikeproto.databaseCache = null
 
 		# Fire plugins
-		docpad.emitSync 'generateAfter', server:docpad.getServer(), (err) ->
+		nikeproto.emitSync 'generateAfter', server:nikeproto.getServer(), (err) ->
 			return next(err)  if err
 
 			# Log generated
-			seconds = (docpad.generateEnded - docpad.generateStarted) / 1000
+			seconds = (nikeproto.generateEnded - nikeproto.generateStarted) / 1000
 			howMany =
 				if collection is database
 					"all #{collection.length}"
 				else
 					collection.length
 			opts.progress?.finish()
-			docpad.log 'info', util.format(locale.renderGenerated, howMany, seconds)
-			docpad.notify (new Date()).toLocaleTimeString(), title: locale.renderGeneratedNotification
+			nikeproto.log 'info', util.format(locale.renderGenerated, howMany, seconds)
+			nikeproto.notify (new Date()).toLocaleTimeString(), title: locale.renderGeneratedNotification
 
 			# Completed
 			return next()
@@ -2892,8 +2892,8 @@ class DocPad extends EventEmitterEnhanced
 	# Create Progress Bar
 	createProgress: ->
 		# Prepare
-		docpad = @
-		config = docpad.getConfig()
+		nikeproto = @
+		config = nikeproto.getConfig()
 
 		# Only show progress if
 		# - prompts are supported (so no servers)
@@ -2904,7 +2904,7 @@ class DocPad extends EventEmitterEnhanced
 			@getLoggers().console.unpipe(process.stdout)
 			@getLogger().once 'log', progress.logListener ?= (data) ->
 				if data.levelNumber <= 5  # notice or higher
-					docpad.destroyProgress(progress)
+					nikeproto.destroyProgress(progress)
 
 		# Return
 		return progress
@@ -2924,7 +2924,7 @@ class DocPad extends EventEmitterEnhanced
 	generate: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		locale = @getLocale()
 		opts.reset ?= true
@@ -2938,27 +2938,27 @@ class DocPad extends EventEmitterEnhanced
 		# Ensure progress is always removed correctly
 		finish = (err) ->
 			if opts.progress
-				docpad.destroyProgress(opts.progress)
+				nikeproto.destroyProgress(opts.progress)
 				opts.progress = null
 			return next(err)
 
 		# Re-load and re-render only what is necessary
 		if opts.collection? is false and opts.reset is false
 			# Prepare
-			docpad.generatePrepare opts, (err) ->
+			nikeproto.generatePrepare opts, (err) ->
 				return finish(err)  if err
-				database = docpad.getDatabase()
+				database = nikeproto.getDatabase()
 
 				# Create a colelction for the files to reload
 				filesToReload = opts.filesToReload or new FilesCollection()
 				# Add anything which was modified since our last generate
-				filesToReload.add(database.findAll(mtime: $gte: docpad.generateStarted).models)
+				filesToReload.add(database.findAll(mtime: $gte: nikeproto.generateStarted).models)
 
 				# Update our generate time
-				docpad.generateStarted = new Date()
+				nikeproto.generateStarted = new Date()
 
 				# Perform the reload of the selected files
-				docpad.loadFiles {collection:filesToReload}, (err) ->
+				nikeproto.loadFiles {collection:filesToReload}, (err) ->
 					return finish(err)  if err
 
 					# Create a collection for the files to render
@@ -2980,19 +2980,19 @@ class DocPad extends EventEmitterEnhanced
 					filesToRender.add(filesToReload.models)
 
 					# Perform the re-render of the selected files
-					docpad.generateRender {collection:filesToRender}, (err) ->
+					nikeproto.generateRender {collection:filesToRender}, (err) ->
 						return finish(err)  if err
 
 						# Finish up
-						docpad.generatePostpare {collection:filesToRender}, (err) ->
+						nikeproto.generatePostpare {collection:filesToRender}, (err) ->
 							return finish(err)
 
 		# Re-load and re-render everything
 		else
 			# Prepare
-			docpad.generateStarted = new Date()
+			nikeproto.generateStarted = new Date()
 			balUtil.flow(
-				object: docpad
+				object: nikeproto
 				action: 'generatePrepare generateParse generateRender generatePostpare'
 				args: [opts]
 				next: (err) ->
@@ -3161,7 +3161,7 @@ class DocPad extends EventEmitterEnhanced
 	watch: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		locale = @getLocale()
 		database = @getDatabase()
@@ -3184,19 +3184,19 @@ class DocPad extends EventEmitterEnhanced
 
 			# Watch reload paths
 			reloadPaths = _.union(config.reloadPaths, config.configPaths)
-			tasks.addTask (complete) -> docpad.watchdir(
+			tasks.addTask (complete) -> nikeproto.watchdir(
 				paths: reloadPaths
 				listeners:
-					'log': docpad.log
-					'error': docpad.error
+					'log': nikeproto.log
+					'error': nikeproto.error
 					'change': ->
-						docpad.log 'info', util.format(locale.watchReloadChange, new Date().toLocaleTimeString())
-						docpad.action 'load', (err) ->
-							return docpad.fatal(err)  if err
+						nikeproto.log 'info', util.format(locale.watchReloadChange, new Date().toLocaleTimeString())
+						nikeproto.action 'load', (err) ->
+							return nikeproto.fatal(err)  if err
 							performGenerate(reset:true)
 				next: (err,_watchers) ->
 					if err
-						docpad.log('warn', "Watching the reload paths has failed:", reloadPaths, err)
+						nikeproto.log('warn', "Watching the reload paths has failed:", reloadPaths, err)
 						return complete()
 					for watcher in _watchers
 						watchers.push(watcher)
@@ -3205,15 +3205,15 @@ class DocPad extends EventEmitterEnhanced
 
 			# Watch regenerate paths
 			regeneratePaths = config.regeneratePaths
-			tasks.addTask (complete) -> docpad.watchdir(
+			tasks.addTask (complete) -> nikeproto.watchdir(
 				paths: regeneratePaths
 				listeners:
-					'log': docpad.log
-					'error': docpad.error
+					'log': nikeproto.log
+					'error': nikeproto.error
 					'change': -> performGenerate(reset:true)
 				next: (err,_watchers) ->
 					if err
-						docpad.log('warn', "Watching the regenerate paths has failed:", regeneratePaths, err)
+						nikeproto.log('warn', "Watching the regenerate paths has failed:", regeneratePaths, err)
 						return complete()
 					for watcher in _watchers
 						watchers.push(watcher)
@@ -3222,15 +3222,15 @@ class DocPad extends EventEmitterEnhanced
 
 			# Watch the source
 			srcPath = config.srcPath
-			tasks.addTask (complete) -> docpad.watchdir(
+			tasks.addTask (complete) -> nikeproto.watchdir(
 				path: srcPath
 				listeners:
-					'log': docpad.log
-					'error': docpad.error
+					'log': nikeproto.log
+					'error': nikeproto.error
 					'change': changeHandler
 				next: (err,watcher) ->
 					if err
-						docpad.log('warn', "Watching the src path has failed:", srcPath, err)
+						nikeproto.log('warn', "Watching the src path has failed:", srcPath, err)
 						return complete()
 					watchers.push(watcher)
 					return complete()
@@ -3254,29 +3254,29 @@ class DocPad extends EventEmitterEnhanced
 			# Do not reset when we do this generate
 			opts.reset ?= false
 			# Log
-			docpad.log util.format(locale.watchRegenerating, new Date().toLocaleTimeString())
+			nikeproto.log util.format(locale.watchRegenerating, new Date().toLocaleTimeString())
 			# Afterwards, re-render anything that should always re-render
-			docpad.action 'generate', opts, (err) ->
-				docpad.error(err)  if err
-				docpad.log util.format(locale.watchRegenerated, new Date().toLocaleTimeString())
+			nikeproto.action 'generate', opts, (err) ->
+				nikeproto.error(err)  if err
+				nikeproto.log util.format(locale.watchRegenerated, new Date().toLocaleTimeString())
 
 		# Change event handler
 		changeHandler = (changeType,filePath,fileCurrentStat,filePreviousStat) ->
 			# Fetch the file
-			docpad.log 'debug', util.format(locale.watchChange, new Date().toLocaleTimeString()), changeType, filePath
+			nikeproto.log 'debug', util.format(locale.watchChange, new Date().toLocaleTimeString()), changeType, filePath
 
 			# Check if we are a file we don't care about
 			# This check should not be needed with v2.3.3 of watchr
 			# however we've still got it here as it may still be an issue
-			isIgnored = docpad.isIgnoredPath(filePath)
+			isIgnored = nikeproto.isIgnoredPath(filePath)
 			if isIgnored
-				docpad.log 'debug', util.format(locale.watchIgnoredChange, new Date().toLocaleTimeString()), filePath
+				nikeproto.log 'debug', util.format(locale.watchIgnoredChange, new Date().toLocaleTimeString()), filePath
 				return
 
 			# Don't care if we are a directory
 			isDirectory = (fileCurrentStat or filePreviousStat).isDirectory()
 			if isDirectory
-				docpad.log 'debug', util.format(locale.watchDirectoryChange, new Date().toLocaleTimeString()), filePath
+				nikeproto.log 'debug', util.format(locale.watchDirectoryChange, new Date().toLocaleTimeString()), filePath
 				return
 
 			# Override the stat's mtime to now
@@ -3284,14 +3284,14 @@ class DocPad extends EventEmitterEnhanced
 			fileCurrentStat?.mtime = new Date()
 
 			# Create the file object
-			file = docpad.ensureFileOrDocument({fullPath:filePath},{stat:fileCurrentStat})
+			file = nikeproto.ensureFileOrDocument({fullPath:filePath},{stat:fileCurrentStat})
 			file.setStat(fileCurrentStat)  if changeType is 'update'
 
 			# File was deleted, delete the rendered file, and remove it from the database
 			if changeType is 'delete'
 				database.remove(file)
 				file.delete (err) ->
-					return docpad.error(err)  if err
+					return nikeproto.error(err)  if err
 					queueRegeneration()
 
 			# File is new or was changed, update it's mtime by setting the stat
@@ -3299,10 +3299,10 @@ class DocPad extends EventEmitterEnhanced
 				queueRegeneration()
 
 		# Watch
-		docpad.log(locale.watchStart)
+		nikeproto.log(locale.watchStart)
 		resetWatchers (err) ->
 			return next(err)  if err
-			docpad.log(locale.watchStarted)
+			nikeproto.log(locale.watchStarted)
 			return next()
 
 		# Chain
@@ -3315,25 +3315,25 @@ class DocPad extends EventEmitterEnhanced
 	run: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		srcPath = @config.srcPath
 		destinationPath = @config.rootPath
 		locale = @getLocale()
 
-		# Run docpad
-		runDocpad = ->
+		# Run nikeproto
+		runNikeProto = ->
 			balUtil.flow(
-				object: docpad
+				object: nikeproto
 				action: 'server generate watch'
 				args: [opts]
 				next: (err) ->
 					return next(err)
 			)
 
-		# Check if we have the docpad structure
+		# Check if we have the nikeproto structure
 		if safefs.existsSync(srcPath)
-			# We have the correct structure, so let's proceed with DocPad
-			runDocpad()
+			# We have the correct structure, so let's proceed with NikeProto
+			runNikeProto()
 		else
 			# We don't have the correct structure
 			# Check if we are running on an empty directory
@@ -3343,12 +3343,12 @@ class DocPad extends EventEmitterEnhanced
 				# Check if our directory is empty
 				if files.length
 					# It isn't empty, display a warning
-					docpad.log('warn', "\n"+util.format(locale.skeletonNonexistant, destinationPath))
+					nikeproto.log('warn', "\n"+util.format(locale.skeletonNonexistant, destinationPath))
 					return next()
 				else
-					docpad.skeleton opts, (err) ->
+					nikeproto.skeleton opts, (err) ->
 						return next(err)  if err
-						runDocpad()
+						runNikeProto()
 
 		# Chain
 		@
@@ -3361,7 +3361,7 @@ class DocPad extends EventEmitterEnhanced
 	skeleton: (opts,next) =>
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		config = @getConfig()
 		skeletonId = config.skeleton
 		srcPath = config.srcPath
@@ -3372,23 +3372,23 @@ class DocPad extends EventEmitterEnhanced
 		# Use a Skeleton
 		useSkeleton = (skeletonModel) ->
 			# Track
-			docpad.track('skeleton-use',{skeletonId:skeletonModel.id})
+			nikeproto.track('skeleton-use',{skeletonId:skeletonModel.id})
 
 			# Log
-			docpad.log 'info', util.format(locale.skeletonInstall, skeletonModel.get('name'), destinationPath)
+			nikeproto.log 'info', util.format(locale.skeletonInstall, skeletonModel.get('name'), destinationPath)
 
 			# Install Skeleton
-			docpad.installSkeleton skeletonModel, destinationPath, (err) ->
+			nikeproto.installSkeleton skeletonModel, destinationPath, (err) ->
 				# Error?
 				return next(err)  if err
 
 				# Re-load configuration
-				docpad.load (err) ->
+				nikeproto.load (err) ->
 					# Error?
 					return next(err)  if err
 
 					# Log
-					docpad.log 'info', locale.skeletonInstalled
+					nikeproto.log 'info', locale.skeletonInstalled
 
 					# Forward
 					return next(err)
@@ -3396,7 +3396,7 @@ class DocPad extends EventEmitterEnhanced
 		# Use No Skeleton
 		useNoSkeleton = ->
 			# Track
-			docpad.track('skeleton-use',{skeletonId:'none'})
+			nikeproto.track('skeleton-use',{skeletonId:'none'})
 
 			# Create the paths
 			safefs.ensurePath srcPath, (err) ->
@@ -3413,33 +3413,33 @@ class DocPad extends EventEmitterEnhanced
 				# Package
 				tasks.addTask (complete) ->
 					data = JSON.stringify({
-						name: 'no-skeleton.docpad'
+						name: 'no-skeleton.nikeproto'
 						version: '0.1.0'
-						description: 'New DocPad project without using a skeleton'
+						description: 'New NikeProto project without using a skeleton'
 						engines:
 							node: '0.10'
 							npm: '1.2'
 						dependencies:
-							docpad: '6.x'
-						main: 'node_modules/docpad/bin/docpad-server'
+							nikeproto: '6.x'
+						main: 'node_modules/nikeproto/bin/nikeproto-server'
 					},null,'\t')
 					safefs.writeFile(pathUtil.join(config.rootPath,'package.json'), data, complete)
 
 				# Config
 				tasks.addTask (complete) ->
 					data = """
-						# DocPad Configuration File
-						# http://docpad.org/docs/config
+						# NikeProto Configuration File
+						# http://nikeproto.org/docs/config
 
-						# Define the DocPad Configuration
-						docpadConfig = {
+						# Define the NikeProto Configuration
+						nikeprotoConfig = {
 							# ...
 						}
 
-						# Export the DocPad Configuration
-						module.exports = docpadConfig
+						# Export the NikeProto Configuration
+						module.exports = nikeprotoConfig
 						"""
-					safefs.writeFile(pathUtil.join(config.rootPath,'docpad.coffee'), data, complete)
+					safefs.writeFile(pathUtil.join(config.rootPath,'nikeproto.coffee'), data, complete)
 
 				# Documents
 				tasks.addTask (complete) ->
@@ -3460,18 +3460,18 @@ class DocPad extends EventEmitterEnhanced
 		safefs.exists srcPath, (exists) ->
 			# Check
 			if exists
-				docpad.log('warn', locale.skeletonExists)
+				nikeproto.log('warn', locale.skeletonExists)
 				return next()
 
 			# Track
-			docpad.track('skeleton-ask')
+			nikeproto.track('skeleton-ask')
 
 			# Do we already have a skeletonId selected?
 			if skeletonId
 				useSkeleton()
 			else
 				# Get the available skeletons
-				docpad.getSkeletons (err,skeletonsCollection) ->
+				nikeproto.getSkeletons (err,skeletonsCollection) ->
 					# Check
 					return next(err)  if err
 
@@ -3495,7 +3495,7 @@ class DocPad extends EventEmitterEnhanced
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
 		{document,err,req,res} = opts
-		docpad = @
+		nikeproto = @
 
 		# If no document, then exit early
 		unless document
@@ -3512,11 +3512,11 @@ class DocPad extends EventEmitterEnhanced
 		dynamic = document.get('dynamic')
 		if dynamic
 			templateData = extendr.extend({}, req.templateData or {}, {req,err})
-			templateData = docpad.getTemplateData(templateData)
+			templateData = nikeproto.getTemplateData(templateData)
 			document.render {templateData}, (err) ->
 				content = document.getOutContent()
 				if err
-					docpad.error(err)
+					nikeproto.error(err)
 					return next(err)
 				else
 					if opts.statusCode?
@@ -3542,11 +3542,11 @@ class DocPad extends EventEmitterEnhanced
 	# Server Middleware: Header
 	serverMiddlewareHeader: (req,res,next) ->
 		# Prepare
-		docpad = @
+		nikeproto = @
 
 		# Handle
 		tools = res.get('X-Powered-By').split(/[,\s]+/g)
-		tools.push("DocPad v#{docpad.version}")
+		tools.push("NikeProto v#{nikeproto.version}")
 		tools = tools.join(',')
 		res.set('X-Powered-By',tools)
 		next()
@@ -3557,18 +3557,18 @@ class DocPad extends EventEmitterEnhanced
 	# Server Middleware: Router
 	serverMiddlewareRouter: (req,res,next) =>
 		# Prepare
-		docpad = @
+		nikeproto = @
 
 		# If we have not performed a generation yet then wait until the initial generation has completed
-		if docpad.generateEnded is null # or docpad.generating is true
-			docpad.once 'generateAfter', ->
-				return docpad.serverMiddlewareRouter(req,res,next)
+		if nikeproto.generateEnded is null # or nikeproto.generating is true
+			nikeproto.once 'generateAfter', ->
+				return nikeproto.serverMiddlewareRouter(req,res,next)
 			return @
 
 		# Prepare
-		database = docpad.getDatabaseCache()
+		database = nikeproto.getDatabaseCache()
 		cleanUrl = req.url.replace(/\?.*/,'')
-		file = docpad.getFileByUrl(req.url,{collection:database}) or docpad.getFileByUrl(cleanUrl,{collection:database})
+		file = nikeproto.getFileByUrl(req.url,{collection:database}) or nikeproto.getFileByUrl(cleanUrl,{collection:database})
 		return next()  if file? is false
 
 		# Check if we are the desired url
@@ -3578,7 +3578,7 @@ class DocPad extends EventEmitterEnhanced
 			return res.redirect(301,url)
 
 		# Serve the file to the user
-		docpad.serveDocument({document:file,req,res,next})
+		nikeproto.serveDocument({document:file,req,res,next})
 
 		# Chain
 		return @
@@ -3586,15 +3586,15 @@ class DocPad extends EventEmitterEnhanced
 	# Server Middleware: 404
 	serverMiddleware404: (req,res,next) =>
 		# Prepare
-		docpad = @
-		database = docpad.getDatabaseCache()
+		nikeproto = @
+		database = nikeproto.getDatabaseCache()
 
 		# Check
 		return res.send(500)  unless database
 
 		# Serve the document to the user
 		document = database.findOne({relativeOutPath: '404.html'})
-		docpad.serveDocument({document,req,res,next,statusCode:404})
+		nikeproto.serveDocument({document,req,res,next,statusCode:404})
 
 		# Chain
 		return @
@@ -3602,15 +3602,15 @@ class DocPad extends EventEmitterEnhanced
 	# Server Middleware: 500
 	serverMiddleware500: (err,req,res,next) =>
 		# Prepare
-		docpad = @
-		database = docpad.getDatabaseCache()
+		nikeproto = @
+		database = nikeproto.getDatabaseCache()
 
 		# Check
 		return res.send(500)  unless database
 
 		# Serve the document to the user
 		document = database.findOne({relativeOutPath: '500.html'})
-		docpad.serveDocument({document,err,req,res,next,statusCode:500})
+		nikeproto.serveDocument({document,err,req,res,next,statusCode:500})
 
 		# Chain
 		return @
@@ -3623,7 +3623,7 @@ class DocPad extends EventEmitterEnhanced
 
 		# Prepare
 		[opts,next] = balUtil.extractOptsAndCallback(opts,next)
-		docpad = @
+		nikeproto = @
 		config = @config
 		locale = @getLocale()
 		port = @getPort()
@@ -3642,7 +3642,7 @@ class DocPad extends EventEmitterEnhanced
 			return next(err)  if err
 
 			# Plugins
-			docpad.emitSync 'serverAfter', {server:serverExpress,serverExpress,serverHttp,express}, (err) ->
+			nikeproto.emitSync 'serverAfter', {server:serverExpress,serverExpress,serverHttp,express}, (err) ->
 				return next(err)  if err
 
 				# Done
@@ -3660,24 +3660,24 @@ class DocPad extends EventEmitterEnhanced
 				return next(err)
 
 			# Listen
-			docpad.log 'debug', util.format(locale.serverStart, port, config.outPath)
+			nikeproto.log 'debug', util.format(locale.serverStart, port, config.outPath)
 			serverHttp.listen port,  ->
 				# Log
 				address = serverHttp.address()
 				serverHostname = if address.address is '0.0.0.0' then 'localhost' else address.address
 				serverPort = address.port
 				serverLocation = "http://#{serverHostname}:#{serverPort}/"
-				docpad.log 'info', util.format(locale.serverStarted, serverLocation, config.outPath)
+				nikeproto.log 'info', util.format(locale.serverStarted, serverLocation, config.outPath)
 
 				# Done
 				return next()
 
 		# Start
-		docpad.emitSync 'serverBefore', {}, (err) ->
+		nikeproto.emitSync 'serverBefore', {}, (err) ->
 			return finish(err)  if err
 
 			# Server
-			{serverExpress,serverHttp} = docpad.getServer(true)
+			{serverExpress,serverHttp} = nikeproto.getServer(true)
 			if !serverExpress and !serverHttp
 				# Require
 				http ?= require('http')
@@ -3686,7 +3686,7 @@ class DocPad extends EventEmitterEnhanced
 				# Create
 				serverExpress = opts.serverExpress or express()
 				serverHttp = opts.serverHttp or http.createServer(serverExpress)
-				docpad.setServer({serverExpress,serverHttp})
+				nikeproto.setServer({serverExpress,serverHttp})
 
 			# Extend the server
 			unless config.extendServer
@@ -3701,21 +3701,21 @@ class DocPad extends EventEmitterEnhanced
 				serverExpress.use(express.methodOverride())  if opts.middlewareMethodOverride isnt false
 
 				# Emit the serverExtend event
-				# So plugins can define their routes earlier than the DocPad routes
-				docpad.emitSync 'serverExtend', {server:serverExpress,serverExpress,serverHttp,express}, (err) ->
+				# So plugins can define their routes earlier than the NikeProto routes
+				nikeproto.emitSync 'serverExtend', {server:serverExpress,serverExpress,serverHttp,express}, (err) ->
 					return next(err)  if err
 
-					# DocPad Header Middleware
+					# NikeProto Header Middleware
 					# Keep it after the serverExtend event
-					serverExpress.use(docpad.serverMiddlewareHeader)
+					serverExpress.use(nikeproto.serverMiddlewareHeader)
 
 					# Router Middleware
 					# Keep it after the serverExtend event
 					serverExpress.use(serverExpress.router)  if opts.middlewareExpressRouter isnt false
 
-					# DocPad Router Middleware
+					# NikeProto Router Middleware
 					# Keep it after the serverExtend event
-					serverExpress.use(docpad.serverMiddlewareRouter)
+					serverExpress.use(nikeproto.serverMiddlewareRouter)
 
 					# Static
 					# Keep it after the serverExtend event
@@ -3724,13 +3724,13 @@ class DocPad extends EventEmitterEnhanced
 					else
 						serverExpress.use(express.static(config.outPath))
 
-					# DocPad 404 Middleware
+					# NikeProto 404 Middleware
 					# Keep it after the serverExtend event
-					serverExpress.use(docpad.serverMiddleware404)  if opts.middleware404 isnt false
+					serverExpress.use(nikeproto.serverMiddleware404)  if opts.middleware404 isnt false
 
-					# DocPad 500 Middleware
+					# NikeProto 500 Middleware
 					# Keep it after the serverExtend event
-					serverExpress.error(docpad.serverMiddleware500)  if opts.middleware500 isnt false
+					serverExpress.error(nikeproto.serverMiddleware500)  if opts.middleware500 isnt false
 
 				# Start the Server
 				startServer(finish)
@@ -3746,12 +3746,12 @@ class DocPad extends EventEmitterEnhanced
 # Export
 module.exports =
 	# Modules
-	DocPad: DocPad
+	NikeProto: NikeProto
 	queryEngine: queryEngine
 	Backbone: Backbone
 
 	# Create Instance
-	# Wrapper for creating a DocPad instance
+	# Wrapper for creating a NikeProto instance
 	# good for future compatibility in case the API changes
 	createInstance: (args...) ->
-		return new DocPad(args...)
+		return new NikeProto(args...)

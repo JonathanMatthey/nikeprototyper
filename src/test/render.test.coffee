@@ -10,18 +10,18 @@ pathUtil = require('path')
 # Configuration
 
 # Vars
-docpadPath = pathUtil.join(__dirname,'..','..')
-rootPath = pathUtil.join(docpadPath,'test')
+nikeprotoPath = pathUtil.join(__dirname,'..','..')
+rootPath = pathUtil.join(nikeprotoPath,'test')
 renderPath = pathUtil.join(rootPath,'render')
 outPath = pathUtil.join(rootPath,'render-out')
 expectPath = pathUtil.join(rootPath,'render-expected')
-cliPath = pathUtil.join(docpadPath,'bin','docpad')
+cliPath = pathUtil.join(nikeprotoPath,'bin','nikeproto')
 nodePath = null
 
 # -------------------------------------
 # Tests
 
-joe.suite 'docpad-render', (suite,test) ->
+joe.suite 'nikeproto-render', (suite,test) ->
 
 	suite 'files', (suite,test) ->
 		# Check render physical files

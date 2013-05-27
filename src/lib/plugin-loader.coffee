@@ -10,8 +10,8 @@ class PluginLoader
 	# ---------------------------------
 	# Constructed
 
-	# DocPad Instance
-	docpad: null
+	# NikeProto Instance
+	nikeproto: null
 
 	# BasePlugin Class
 	BasePlugin: null
@@ -49,12 +49,12 @@ class PluginLoader
 	# Functions
 
 	# Constructor
-	constructor: ({@docpad,@dirPath,@BasePlugin}) ->
+	constructor: ({@nikeproto,@dirPath,@BasePlugin}) ->
 		# Prepare
-		docpad = @docpad
+		nikeproto = @nikeproto
 
 		# Apply
-		@pluginName = pathUtil.basename(@dirPath).replace(/^docpad-plugin-/,'')
+		@pluginName = pathUtil.basename(@dirPath).replace(/^nikeproto-plugin-/,'')
 		@pluginClass = {}
 		@packageData = {}
 		@nodeModulesPath = pathUtil.resolve(@dirPath, 'node_modules')
@@ -110,12 +110,12 @@ class PluginLoader
 	# next(err,supported)
 	unsupported: (next) ->
 		# Prepare
-		docpad = @docpad
+		nikeproto = @nikeproto
 		unsupported = false
 
 		# Check type
 		keywords = @packageData.keywords or []
-		unless 'docpad-plugin' in keywords
+		unless 'nikeproto-plugin' in keywords
 			unsupported = 'type'
 
 		# Check platform
@@ -133,9 +133,9 @@ class PluginLoader
 				unless semver.satisfies(process.version, engines.node)
 					unsupported = 'engine'
 
-			# DocPad engine
-			if engines.docpad?
-				unless semver.satisfies(docpad.version, engines.docpad)
+			# NikeProto engine
+			if engines.nikeproto?
+				unless semver.satisfies(nikeproto.version, engines.nikeproto)
 					unsupported = 'version'
 
 		# Supported
@@ -149,12 +149,12 @@ class PluginLoader
 	# next(err)
 	install: (next) ->
 		# Prepare
-		docpad = @docpad
+		nikeproto = @nikeproto
 
 		# Only install if we have a package path
 		if @packagePath
 			# Install npm modules
-			docpad.initNodeModules(
+			nikeproto.initNodeModules(
 				path: @dirPath
 				next: (err,results) ->
 					# Forward
@@ -172,8 +172,8 @@ class PluginLoader
 	# next(err,pluginClass)
 	load: (next) ->
 		# Prepare
-		docpad = @docpad
-		locale = docpad.getLocale()
+		nikeproto = @nikeproto
+		locale = nikeproto.getLocale()
 
 		# Load
 		try
@@ -186,13 +186,13 @@ class PluginLoader
 			# Alphanumeric
 			if /^[a-z0-9]+$/.test(@pluginName) is false
 				validPluginName = @pluginName.replace(/[^a-z0-9]/,'')
-				docpad.log('warn', util.format(locale.pluginNamingConventionInvalid, @pluginName, validPluginName))
+				nikeproto.log('warn', util.format(locale.pluginNamingConventionInvalid, @pluginName, validPluginName))
 			# Same name
 			if pluginPrototypeName is null
 				@pluginClass::name = @pluginName
-				docpad.log('warn',  util.format(locale.pluginPrototypeNameUndefined, @pluginName))
+				nikeproto.log('warn',  util.format(locale.pluginPrototypeNameUndefined, @pluginName))
 			else if pluginPrototypeName isnt @pluginName
-				docpad.log('warn', util.format(locale.pluginPrototypeNameDifferent, @pluginName, pluginPrototypeName))
+				nikeproto.log('warn', util.format(locale.pluginPrototypeNameDifferent, @pluginName, pluginPrototypeName))
 		catch err
 			# An error occured, return it
 			return next(err,null)
@@ -209,8 +209,8 @@ class PluginLoader
 		# Load
 		try
 			# Create instance with merged configuration
-			docpad = @docpad
-			pluginInstance = new @pluginClass({docpad,config})
+			nikeproto = @nikeproto
+			pluginInstance = new @pluginClass({nikeproto,config})
 		catch err
 			# An error occured, return it
 			return next(err,null)

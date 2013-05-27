@@ -1,5 +1,5 @@
 # Require
-DocPad = require(__dirname+'/../lib/docpad')
+NikeProto = require(__dirname+'/../lib/nikeproto')
 
 # Prepare
 getArgument = (name,value=null,defaultValue=null) ->
@@ -9,24 +9,24 @@ getArgument = (name,value=null,defaultValue=null) ->
 		result = value ? process.argv[argumentIndex+1]
 	return result
 
-# DocPad Action
+# NikeProto Action
 action = getArgument('action',null,'server generate')
 
-# DocPad Configuration
-docpadConfig = {}
-docpadConfig.port = (->
+# NikeProto Configuration
+nikeprotoConfig = {}
+nikeprotoConfig.port = (->
 	port = getArgument('port')
 	port = parseInt(port,10)  if port and isNaN(port) is false
 	return port
 )()
 
-# Create DocPad Instance
-DocPad.createInstance docpadConfig, (err,docpad) ->
+# Create NikeProto Instance
+NikeProto.createInstance nikeprotoConfig, (err,nikeproto) ->
 	# Check
 	return console.log(err.stack)  if err
 
 	# Generate and Serve
-	docpad.action action, (err) ->
+	nikeproto.action action, (err) ->
 		# Check
 		return console.log(err.stack)  if err
 

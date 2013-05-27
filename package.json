@@ -1,10 +1,10 @@
 {
-	"name": "docpad",
+	"name": "nikeproto",
 	"version": "6.35.0",
-	"description": "DocPad is a language agnostic document management system. This means you write your website as documents, in whatever language you wish, and DocPad will handle the compiling, templates and layouts for you. For static documents it will generate static files, for dynamic documents it'll re-render them on each request. You can utilise DocPad by itself, or use it as a module your own custom system. It's pretty cool, and well worth checking out. We love it.",
-	"homepage": "https://github.com/bevry/docpad",
-	"installUrl": "http://docpad.org/install",
-	"upgradeUrl": "http://docpad.org/upgrade",
+	"description": "NikeProto is a language agnostic document management system. This means you write your website as documents, in whatever language you wish, and NikeProto will handle the compiling, templates and layouts for you. For static documents it will generate static files, for dynamic documents it'll re-render them on each request. You can utilise NikeProto by itself, or use it as a module your own custom system. It's pretty cool, and well worth checking out. We love it.",
+	"homepage": "https://github.com/bevry/nikeproto",
+	"installUrl": "http://nikeproto.org/install",
+	"upgradeUrl": "http://nikeproto.org/upgrade",
 	"keywords": [
 		"document management system", "dms",
 		"content management system", "cms",
@@ -55,11 +55,11 @@
 		"Sven Vetsch (https://github.com/disenchant)"
 	],
 	"bugs": {
-		"url": "https://github.com/bevry/docpad/issues"
+		"url": "https://github.com/bevry/nikeproto/issues"
 	},
 	"repository" : {
 		"type": "git",
-		"url": "http://github.com/bevry/docpad.git"
+		"url": "http://github.com/bevry/nikeproto.git"
 	},
 	"engines" : {
 		"node": ">=0.8",
@@ -111,10 +111,10 @@
 		"lib": "./out/lib"
 	},
 	"bin": {
-		"docpad": "./bin/docpad",
-		"docpad-compile": "./bin/docpad-compile",
-		"docpad-debug": "./bin/docpad-debug",
-		"docpad-server": "./bin/docpad-server"
+		"nikeproto": "./bin/nikeproto",
+		"nikeproto-compile": "./bin/nikeproto-compile",
+		"nikeproto-debug": "./bin/nikeproto-debug",
+		"nikeproto-server": "./bin/nikeproto-server"
 	},
 	"scripts": {
 		"test": "./node_modules/.bin/cake test"

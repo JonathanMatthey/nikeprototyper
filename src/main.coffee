@@ -1,24 +1,24 @@
 # Requires
 pathUtil = require('path')
-{DocPad,queryEngine,Backbone,createInstance,createMiddlewareInstance} = require(__dirname+'/lib/docpad')
+{NikeProto,queryEngine,Backbone,createInstance,createMiddlewareInstance} = require(__dirname+'/lib/nikeproto')
 
 # Export
 module.exports =
 	# Pre-Defined
-	DocPad: DocPad
+	NikeProto: NikeProto
 	queryEngine: queryEngine
 	Backbone: Backbone
 	createInstance: createInstance
 	createMiddlewareInstance: createMiddlewareInstance
 
-	# Require a local DocPad file
+	# Require a local NikeProto file
 	require: (relativePath) ->
 		# Absolute the path
 		absolutePath = pathUtil.normalize(pathUtil.join(__dirname,relativePath))
 
-		# now check we if are actually a local docpad file
+		# now check we if are actually a local nikeproto file
 		if absolutePath.replace(__dirname,'') is absolutePath
-			throw new Error("docpad.require is limited to local docpad files only: #{relativePath}")
+			throw new Error("nikeproto.require is limited to local nikeproto files only: #{relativePath}")
 
 		# now check if the path actually exists
 		try

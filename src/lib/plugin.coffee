@@ -10,8 +10,8 @@ class BasePlugin
 	# ---------------------------------
 	# Inherited
 
-	# DocPad Instance
-	docpad: null
+	# NikeProto Instance
+	nikeproto: null
 
 
 	# ---------------------------------
@@ -31,8 +31,8 @@ class BasePlugin
 	constructor: (opts) ->
 		# Prepare
 		me = @
-		{docpad,config} = opts
-		@docpad = docpad
+		{nikeproto,config} = opts
+		@nikeproto = nikeproto
 
 		# Bind listeners
 		@bindListeners()
@@ -63,9 +63,9 @@ class BasePlugin
 	# Set Configuration
 	setConfig: (instanceConfig=null) =>
 		# Prepare
-		docpad = @docpad
-		userConfig = @docpad.config.plugins[@name]
-		@config = @docpad.config.plugins[@name] = {}
+		nikeproto = @nikeproto
+		userConfig = @nikeproto.config.plugins[@name]
+		@config = @nikeproto.config.plugins[@name] = {}
 
 		# Instance config
 		@setInstanceConfig(instanceConfig)  if instanceConfig
@@ -73,7 +73,7 @@ class BasePlugin
 		# Merge configurations
 		configPackages = [@initialConfig, userConfig, @instanceConfig]
 		configsToMerge = [@config]
-		docpad.mergeConfigurations(configPackages, configsToMerge)
+		nikeproto.mergeConfigurations(configPackages, configsToMerge)
 
 		# Unbind if we are disabled
 		@unbindEvents()  unless @isEnabled()
@@ -92,8 +92,8 @@ class BasePlugin
 	bindListeners: ->
 		# Prepare
 		pluginInstance = @
-		docpad = @docpad
-		events = docpad.getEvents()
+		nikeproto = @nikeproto
+		events = nikeproto.getEvents()
 
 		# Bind events
 		eachr events, (eventName) ->
@@ -112,8 +112,8 @@ class BasePlugin
 	addListeners: ->
 		# Prepare
 		pluginInstance = @
-		docpad = @docpad
-		events = docpad.getEvents()
+		nikeproto = @nikeproto
+		events = nikeproto.getEvents()
 
 		# Bind events
 		eachr events, (eventName) ->
@@ -126,8 +126,8 @@ class BasePlugin
 				eventHandlerPriority = pluginInstance[eventName+'Priority'] or pluginInstance.priority or null
 				eventHandler.priority = eventHandlerPriority
 
-				# Wrap the event handler, and bind it to docpad
-				docpad
+				# Wrap the event handler, and bind it to nikeproto
+				nikeproto
 					.off(eventName, eventHandler)
 					.on(eventName, eventHandler)
 
@@ -138,8 +138,8 @@ class BasePlugin
 	removeListeners: ->
 		# Prepare
 		pluginInstance = @
-		docpad = @docpad
-		events = docpad.getEvents()
+		nikeproto = @nikeproto
+		events = nikeproto.getEvents()
 
 		# Bind events
 		eachr events, (eventName) ->
@@ -148,8 +148,8 @@ class BasePlugin
 
 			# Check it exists and is a function
 			if typeChecker.isFunction(eventHandler)
-				# Wrap the event handler, and unbind it from docpad
-				docpad.off(eventName, eventHandler)
+				# Wrap the event handler, and unbind it from nikeproto
+				nikeproto.off(eventName, eventHandler)
 
 		# Chain
 		@

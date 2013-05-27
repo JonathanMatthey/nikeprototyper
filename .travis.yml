@@ -7,8 +7,7 @@ node_js:
   - "0.10"
 notifications:
   irc:
-    - "irc.freenode.org#bevry-dev"
-    - "irc.freenode.org#docpad-dev"
+    - "irc.squirrel.org"
   email:
     recipients:
-      - travisci@bevry.me
+      - mattheyj@gmail.com

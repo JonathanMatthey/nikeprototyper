@@ -1,5 +1,5 @@
 # Require
-DocPad = require(__dirname+'/../lib/docpad')
+NikeProto = require(__dirname+'/../lib/nikeproto')
 
 # Prepare
 getArgument = (name,value=null,defaultValue=null) ->
@@ -9,28 +9,28 @@ getArgument = (name,value=null,defaultValue=null) ->
 		result = value ? process.argv[argumentIndex+1]
 	return result
 
-# DocPad Action
+# NikeProto Action
 action = (getArgument('action',null,'generate')+' '+getArgument('watch','watch','')).trim()
 
-# DocPad Configuration
-docpadConfig = {}
-docpadConfig.rootPath = getArgument('rootPath',null,process.cwd())
-docpadConfig.outPath = getArgument('outPath',null,docpadConfig.rootPath+'/out')
-docpadConfig.srcPath = getArgument('srcPath',null,docpadConfig.rootPath+'/src')
-docpadConfig.documentsPaths = (->
+# NikeProto Configuration
+nikeprotoConfig = {}
+nikeprotoConfig.rootPath = getArgument('rootPath',null,process.cwd())
+nikeprotoConfig.outPath = getArgument('outPath',null,nikeprotoConfig.rootPath+'/out')
+nikeprotoConfig.srcPath = getArgument('srcPath',null,nikeprotoConfig.rootPath+'/src')
+nikeprotoConfig.documentsPaths = (->
 	documentsPath = getArgument('documentsPath')
 	if documentsPath?
-		documentsPath = docpadConfig.srcPath  if documentsPath is 'auto'
+		documentsPath = nikeprotoConfig.srcPath  if documentsPath is 'auto'
 	else
-		documentsPath = docpadConfig.srcPath+'/documents'
+		documentsPath = nikeprotoConfig.srcPath+'/documents'
 	return [documentsPath]
 )()
-docpadConfig.port = (->
+nikeprotoConfig.port = (->
 	port = getArgument('port')
 	port = parseInt(port,10)  if port and isNaN(port) is false
 	return port
 )()
-docpadConfig.renderSingleExtensions = (->
+nikeprotoConfig.renderSingleExtensions = (->
 	renderSingleExtensions = getArgument('renderSingleExtensions',null,'auto')
 	if renderSingleExtensions in ['true','yes']
 		renderSingleExtensions = true
@@ -39,13 +39,13 @@ docpadConfig.renderSingleExtensions = (->
 	return renderSingleExtensions
 )()
 
-# Create DocPad Instance
-DocPad.createInstance docpadConfig, (err,docpad) ->
+# Create NikeProto Instance
+NikeProto.createInstance nikeprotoConfig, (err,nikeproto) ->
 	# Check
 	return console.log(err.stack)  if err
 
 	# Generate and Serve
-	docpad.action action, (err) ->
+	nikeproto.action action, (err) ->
 		# Check
 		return console.log(err.stack)  if err
 

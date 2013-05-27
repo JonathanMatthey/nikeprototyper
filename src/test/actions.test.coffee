@@ -2,7 +2,7 @@
 request = require('request')
 balUtil = require('bal-util')
 safefs = require('safefs')
-DocPad = require(__dirname+'/../lib/docpad')
+NikeProto = require(__dirname+'/../lib/nikeproto')
 {expect} = require('chai')
 joe = require('joe')
 _ = require('lodash')
@@ -19,8 +19,8 @@ outExpectedPath = rootPath+'/out-expected'
 baseUrl = "http://localhost:#{port}"
 testWait = 1000*60*5  # five minutes
 
-# Configure DocPad
-docpadConfig =
+# Configure NikeProto
+nikeprotoConfig =
 	growl: false
 	port: port
 	rootPath: rootPath
@@ -40,42 +40,42 @@ process.on 'uncaughtException', (err) ->
 	throw err
 
 # Local globals
-docpad = null
+nikeproto = null
 
 
 # -------------------------------------
 # Tests
 
-joe.suite 'docpad-actions', (suite,test) ->
+joe.suite 'nikeproto-actions', (suite,test) ->
 
 	test 'create', (done) ->
-		docpad = DocPad.createInstance docpadConfig, (err) ->
+		nikeproto = NikeProto.createInstance nikeprotoConfig, (err) ->
 			done(err)
 
 	test 'config', (done) ->
 		expected = {a:'instanceConfig',b:'instanceConfig',c:'websiteConfig'}
 
-		config = docpad.getConfig()
+		config = nikeproto.getConfig()
 		{a,b,c} = config
 		expect({a,b,c}).to.deep.equal(expected)
 
-		templateData = docpad.getTemplateData()
+		templateData = nikeproto.getTemplateData()
 		{a,b,c} = templateData
 		expect({a,b,c}).to.deep.equal(expected)
 
 		done()
 
 	test 'clean', (done) ->
-		docpad.action 'clean', (err) ->
+		nikeproto.action 'clean', (err) ->
 			done(err)
 
 	test 'install', (done) ->
-		docpad.action 'install', (err) ->
+		nikeproto.action 'install', (err) ->
 			done(err)
 
 	suite 'generate', (suite,test) ->
 		test 'action', (done) ->
-			docpad.action 'generate', (err) ->
+			nikeproto.action 'generate', (err) ->
 				done(err)
 
 		suite 'results', (suite,test) ->
@@ -123,7 +123,7 @@ joe.suite 'docpad-actions', (suite,test) ->
 	suite 'server', (suite,test) ->
 
 		test 'server action', (done) ->
-			docpad.action 'server', (err) ->
+			nikeproto.action 'server', (err) ->
 				done(err)
 
 		test 'served generated documents', (done) ->

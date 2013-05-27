@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require(__dirname+'/../out/bin/docpad-compile');
+require(__dirname+'/../out/bin/nikeproto-compile');

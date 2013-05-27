@@ -5,13 +5,13 @@ extendr = require('extendr')
 joe = require('joe')
 {expect} = require('chai')
 CSON = require('cson')
-DocPad = require(__dirname+'/docpad')
+NikeProto = require(__dirname+'/nikeproto')
 
 # Prepare
 pluginPort = 2000+String((new Date()).getTime()).substr(-6,4)
 testers = {
 	CSON,
-	DocPad
+	NikeProto
 }
 
 # Plugin Tester
@@ -26,8 +26,8 @@ class PluginTester
 		outExpectedPath: null
 		removeEmptyLines: false
 
-	# DocPad Config
-	docpadConfig:
+	# NikeProto Config
+	nikeprotoConfig:
 		port: null
 		growl: false
 		logLevel: (if ('-d' in process.argv) then 7 else 5)
@@ -41,30 +41,30 @@ class PluginTester
 		catchExceptions: false
 		environment: null
 
-	# DocPad Instance
-	docpad: null
+	# NikeProto Instance
+	nikeproto: null
 
 	# Constructor
-	constructor: (config={},docpadConfig={},next) ->
+	constructor: (config={},nikeprotoConfig={},next) ->
 		# Apply Configuration
 		tester = @
 		@config = extendr.deepExtendPlainObjects({}, PluginTester::config, @config, config)
-		@docpadConfig = extendr.deepExtendPlainObjects({}, PluginTester::docpadConfig, @docpadConfig, docpadConfig)
-		@docpadConfig.port ?= ++pluginPort
+		@nikeprotoConfig = extendr.deepExtendPlainObjects({}, PluginTester::nikeprotoConfig, @nikeprotoConfig, nikeprotoConfig)
+		@nikeprotoConfig.port ?= ++pluginPort
 		@config.testerName ?= @config.pluginName
 
 		# Extend Configuration
 		@config.testPath or= pathUtil.join(@config.pluginPath,'test')
 		@config.outExpectedPath or= pathUtil.join(@config.testPath,'out-expected')
 
-		# Extend DocPad Configuration
-		@docpadConfig.rootPath or= @config.testPath
-		@docpadConfig.outPath or= pathUtil.join(@docpadConfig.rootPath,'out')
-		@docpadConfig.srcPath or= pathUtil.join(@docpadConfig.rootPath,'src')
-		@docpadConfig.pluginPaths ?= [@config.pluginPath]
+		# Extend NikeProto Configuration
+		@nikeprotoConfig.rootPath or= @config.testPath
+		@nikeprotoConfig.outPath or= pathUtil.join(@nikeprotoConfig.rootPath,'out')
+		@nikeprotoConfig.srcPath or= pathUtil.join(@nikeprotoConfig.rootPath,'src')
+		@nikeprotoConfig.pluginPaths ?= [@config.pluginPath]
 		defaultEnabledPlugins = {}
 		defaultEnabledPlugins[@config.pluginName] = true
-		@docpadConfig.enabledPlugins or= defaultEnabledPlugins
+		@nikeprotoConfig.enabledPlugins or= defaultEnabledPlugins
 
 		# Test API
 		joe.describe @config.testerName, (suite,task) ->
@@ -76,20 +76,20 @@ class PluginTester
 		# Chain
 		@
 
-	# Create DocPad Instance
+	# Create NikeProto Instance
 	testCreate: ->
 		# Prepare
 		tester = @
-		docpadConfig = @docpadConfig
+		nikeprotoConfig = @nikeprotoConfig
 
 		# Create Instance
 		@test "create", (done) ->
-			DocPad.createInstance docpadConfig, (err,docpad) ->
+			NikeProto.createInstance nikeprotoConfig, (err,nikeproto) ->
 				return done(err)  if err
-				tester.docpad = docpad
-				tester.docpad.action 'clean', (err) ->
+				tester.nikeproto = nikeproto
+				tester.nikeproto.action 'clean', (err) ->
 					return done(err)  if err
-					tester.docpad.action 'install', (err) ->
+					tester.nikeproto.action 'install', (err) ->
 						return done(err)
 
 		# Chain
@@ -102,7 +102,7 @@ class PluginTester
 
 		# Test
 		@test "load plugin #{tester.config.pluginName}", (done) ->
-			tester.docpad.loadedPlugin tester.config.pluginName, (err,loaded) ->
+			tester.nikeproto.loadedPlugin tester.config.pluginName, (err,loaded) ->
 				return done(err)  if err
 				expect(loaded).to.be.ok
 				return done()
@@ -117,7 +117,7 @@ class PluginTester
 
 		# Handle
 		@test "server", (done) ->
-			tester.docpad.action 'server', (err) ->
+			tester.nikeproto.action 'server', (err) ->
 				return done(err)
 
 		# Chain
@@ -130,7 +130,7 @@ class PluginTester
 
 		# Test
 		@test "generate", (done) ->
-			tester.docpad.action 'generate', (err) ->
+			tester.nikeproto.action 'generate', (err) ->
 				return done(err)
 
 		# Chain
@@ -187,12 +187,12 @@ class RendererTester extends PluginTester
 		# Test
 		@suite "generate", (suite,test) ->
 			test 'action', (done) ->
-				tester.docpad.action 'generate', (err) ->
+				tester.nikeproto.action 'generate', (err) ->
 					return done(err)
 
 			test 'results', (done) ->
 				# Get actual results
-				balUtil.scantree tester.docpadConfig.outPath, (err,outResults) ->
+				balUtil.scantree tester.nikeprotoConfig.outPath, (err,outResults) ->
 					return done(err)  if err
 					# Get expected results
 					balUtil.scantree tester.config.outExpectedPath, (err,outExpectedResults) ->
@@ -216,16 +216,16 @@ class RendererTester extends PluginTester
 # Test a plugin
 # test({pluginPath: String})
 testers.test =
-test = (testerConfig, docpadConfig) ->
+test = (testerConfig, nikeprotoConfig) ->
 	# Configure
 	testerConfig.pluginPath = pathUtil.resolve(testerConfig.pluginPath)
-	testerConfig.pluginName ?= pathUtil.basename(testerConfig.pluginPath).replace('docpad-plugin-','')
+	testerConfig.pluginName ?= pathUtil.basename(testerConfig.pluginPath).replace('nikeproto-plugin-','')
 	testerConfig.testerPath ?= pathUtil.join('out', "#{testerConfig.pluginName}.tester.js")
 	testerConfig.testerPath = pathUtil.resolve(testerConfig.pluginPath, testerConfig.testerPath)
 
 	# Test the plugin's tester
 	testerClass = require(testerConfig.testerPath)(testers)
-	new testerClass testerConfig, docpadConfig, (err,testerInstance) ->
+	new testerClass testerConfig, nikeprotoConfig, (err,testerInstance) ->
 		throw err  if err
 		testerInstance.testEverything()
 

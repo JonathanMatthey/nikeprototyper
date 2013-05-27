@@ -1,7 +1,7 @@
 {
 	# Subscription
 	tosPrompt: """
-		Before we continue, have you read and agree to DocPad's Terms of Service (http://bevry.me/tos) and Privacy Policy (http://bevry.me/privacy)?
+		Before we continue, have you read and agree to NikeProto's Terms of Service (http://squirrel.me/tos) and Privacy Policy (http://squirrel.me/privacy)?
 		"""
 	tosAgree: """
 		Fantastic. We like informed people!
@@ -30,12 +30,12 @@
 	skeletonInstalled: "Installed the skeleton succesfully"
 	skeletonExists: "Didn't place the skeleton as the desired structure already exists"
 	skeletonNonexistant: """
-		We couldn't find an existing DocPad project inside your current directory. Looked at: %s
-		If you're wanting to use a pre-made skeleton for the basis of your new project, then run DocPad again inside an empty directory.
+		We couldn't find an existing nikeproto project inside your current directory. Looked at: %s
+		If you're wanting to use a pre-made skeleton for the basis of your new project, then run nikeproto again inside an empty directory.
 		If you're wanting to start your new project from scratch, then refer to the Getting Started guide here:
-			http://docpad.org/get-started
+			http://nikeproto.org/get-started
 		For more information on what this means, visit:
-			http://docpad.org/troubleshoot
+			http://nikeproto.org/troubleshoot
 		"""
 	skeletonNoneName: "No Skeleton"
 	skeletonNoneDescription: "Prefer to start from scratch? You can get started without any skeleton if you wish"
@@ -43,7 +43,7 @@
 	# Server
 	serverInUse: "Could not start the web server, chances are the desired port %s is already in use"
 	serverStart: "Starting server on port %s and directory %s"
-	serverStarted: "DocPad listening to %s on directory %s"
+	serverStarted: "nikeproto listening to %s on directory %s"
 
 	# Watching
 	watchStart: 'Watching setup starting...'
@@ -67,7 +67,7 @@
 	renderParsing: 'Parsing everything'
 	renderParsed: 'Parsed everything'
 	renderNonexistant: 'Cannot generate website as the src dir was not found'
-	renderNoPlugins: "DocPad is currently running without any plugins installed. You probably want to install some: http://docpad.org/plugins"
+	renderNoPlugins: "nikeproto is currently running without any plugins installed. You probably want to install some: http://nikeproto.org/plugins"
 	renderDirectoryParsing: "Parsing directory: %s"
 	renderDirectoryParsed: "Parsed directory: %s"
 	renderDirectoryNonexistant: "Skipped directory: %s (it does not exist)"
@@ -100,15 +100,15 @@
 	pluginContinued: "Continuing with the unsupported plugin: %s"
 	pluginNamingConventionInvalid: """
 		The plugin %s uses an invalid naming convention. We only allow alphanumeric characters (no symbols). Perhaps change it to %s
-		More information here: http://docpad.org/plugin-conventions
+		More information here: http://nikeproto.org/plugin-conventions
 		"""
 	pluginPrototypeNameUndefined: """
 		The plugin %s did not have its name defined in its prototype, defaulting it to the directory naming convention.
-		More information here: http://docpad.org/plugin-conventions
+		More information here: http://nikeproto.org/plugin-conventions
 		"""
 	pluginPrototypeNameDifferent: """
 		The plugin %s is using a different name (%s) for its prototype name. This can cause issues.
-		More information here: http://docpad.org/plugin-conventions
+		More information here: http://nikeproto.org/plugin-conventions
 		"""
 
 	# Collections
@@ -140,7 +140,7 @@
 	consoleDescriptionWatch: "watches your project for changes, and (re)generates whenever a change is made"
 	consoleDescriptionInstall: "ensure everything is installed correctly"
 	consoleDescriptionClean: "ensure everything is cleaned correctly (will remove your out directory)"
-	consoleDescriptionInfo: "display the information about your docpad instance"
+	consoleDescriptionInfo: "display the information about your nikeproto instance"
 	consoleDescriptionHelp: "output the help"
 	consoleDescriptionUnknown: "anything else ouputs the help"
 
@@ -161,9 +161,9 @@
 		"""
 	renderedEarlyViaInclude: """
 		Your include of %s has failed as that document has not been rendered yet.
-		More information here: http://docpad.org/render-early-via-include
+		More information here: http://nikeproto.org/render-early-via-include
 		"""
-	welcome: "Welcome to DocPad %s"
+	welcome: "Welcome to nikeproto %s"
 	welcomePlugins: "Plugins: %s"
 	welcomeEnvironment: "Environment: %s"
 	includeFailed: "Could not include the file at path %s as we could not find it"
@@ -175,9 +175,9 @@
 	trackError: "An error occured sending statistics"
 	exchangeError: "An error occured fetching the exchange data, this is okay, but not all skeletons will be available to you"
 	unknownModelInCollection: "Unknown model structure inside the collection"
-	upgradeNotification: "There's a new version of DocPad available"
+	upgradeNotification: "There's a new version of nikeproto available"
 	upgradeDetails: """
-		There's a new version of DocPad available, you should probably upgrade...
+		There's a new version of nikeproto available, you should probably upgrade...
 		current version:          %s
 		new version:              %s
 		upgrade instructions:     %s

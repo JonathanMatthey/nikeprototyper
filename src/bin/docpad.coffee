@@ -1,5 +1,5 @@
 # Require
-DocPad = require(__dirname+'/../lib/docpad')
+NikeProto = require(__dirname+'/../lib/nikeproto')
 ConsoleInterface = require(__dirname+'/../lib/interfaces/console')
 
 # Fetch action
@@ -11,13 +11,13 @@ action =
 	else
 		false
 
-# Create DocPad Instance
-DocPad.createInstance {action}, (err,docpad) ->
+# Create NikeProto Instance
+NikeProto.createInstance {action}, (err,nikeproto) ->
 	# Check
 	return console.log(err.stack)  if err
 
 	# Create Console Interface
-	new ConsoleInterface {docpad}, (err,consoleInterface) ->
+	new ConsoleInterface {nikeproto}, (err,consoleInterface) ->
 		# Check
 		return console.log(err.stack)  if err
 

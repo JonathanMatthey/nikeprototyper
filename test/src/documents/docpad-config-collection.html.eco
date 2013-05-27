@@ -1,6 +1,6 @@
 ---
-title: 'DocPad Config Collection Document'
-tag: ['docpad-config-collection']
+title: 'NikeProto Config Collection Document'
+tag: ['nikeproto-config-collection']
 ---
 
-<span><%- JSON.stringify @getCollection('docpadConfigCollection').pluck('title') %></span>
+<span><%- JSON.stringify @getCollection('nikeprotoConfigCollection').pluck('title') %></span>
